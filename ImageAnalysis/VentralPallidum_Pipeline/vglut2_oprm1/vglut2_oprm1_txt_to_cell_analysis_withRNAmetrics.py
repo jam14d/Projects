@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 ##SPECIFIC TO vglut22: OPRM1 COMPOSITE
 ##IN PROGRESS!
@@ -12,6 +14,16 @@ paths = {
     "detection_csv": r"/Volumes/backup driv/VP_qp_LF - ITERATION4 - VGLUT2_OPRM1_COMPOSITE/detections_iteration4_vglut2withMu_12.13.24_csv",
     "annotation_csv": r"/Volumes/backup driv/VP_qp_LF - ITERATION4 - VGLUT2_OPRM1_COMPOSITE/annotations_iteration4_vglut2withMu_12.13.24_csv"
 }
+
+# Define directories for saving pie charts
+base_dir = "/Volumes/backup driv/VP_qp_LF - ITERATION4 - VGLUT2_OPRM1_COMPOSITE"
+per_image_dir = os.path.join(base_dir, "PieCharts_Per_Image")
+aggregated_dir = os.path.join(base_dir, "PieChart_Aggregated")
+
+# Ensure the directories exist
+os.makedirs(per_image_dir, exist_ok=True)
+os.makedirs(aggregated_dir, exist_ok=True)
+
 
 # Function to convert Windows paths to Unix-like paths if running in a Unix environment
 def convert_to_unix_path(win_path):
@@ -125,7 +137,7 @@ for k, file in enumerate(filelist):
         PinkCellCount = len(QPPink_only)
         bothCellCount = len(QPboth)
         noneCellCount = len(QPnone)
-        totalCells = YellowCellCount + PinkCellCount + bothCellCount
+        totalCells = YellowCellCount + PinkCellCount + bothCellCount + noneCellCount
 
         YellowPercentage = (YellowCellCount / totalCells * 100) if totalCells > 0 else None
         PinkPercentage = (PinkCellCount / totalCells * 100) if totalCells > 0 else None
@@ -157,7 +169,9 @@ for k, file in enumerate(filelist):
         DataDraft.loc[k, "Double Negative Cell Percentage"] = nonePercentage
 
         DataDraft.loc[k, "Total Cell Area (mm^2)"] = totalCellArea
+        DataDraft.loc[k, "Total Cell Count"] = totalCells  # Add this line
         DataDraft.loc[k, "Total Annotation Area (mm^2)"] = anoArea
+
 
         # Subcellular metrics
         for cls in [Yellow_posName_2, Pink_posName_2, double_positive, double_negative]:
@@ -167,6 +181,90 @@ for k, file in enumerate(filelist):
 
     except Exception as e:
         print(f"Error processing {file}: {e}")
+
+# Define custom pastel colors
+custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
+# Define the legend labels
+legend_labels = ["vGLUT2+: OPRM1+", "vGLUT2+: OPRM1-"]
+
+
+
+# Generate pie chart for each image
+for idx, row in DataDraft.iterrows():
+    sample = row["Sample"]
+    double_positive = row["Double Positive Cell Count"]
+    vglut2_only = row["oprm1-: vglut2+ Cell Count"]
+
+    # Skip if data is missing
+    if pd.isna(double_positive) or pd.isna(vglut2_only):
+        continue
+
+    # Create pie chart
+    fig = plt.figure(figsize=(8, 8))  # Explicitly store the figure
+    plt.pie(
+        [double_positive, vglut2_only],
+        autopct="%1.1f%%",
+        startangle=90,
+        colors=custom_colors,
+        wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+    )
+    plt.title(f"Proportion of OPRM1+ to vGLUT2+ Cells for {sample}")
+    plt.axis("equal")
+
+    # Save the pie chart and close the figure
+    file_path = os.path.join(per_image_dir, f"{sample}_PieChart.png")
+    plt.savefig(file_path, bbox_inches="tight")
+    plt.close(fig)  # Close the figure to free memory
+
+from matplotlib.patches import Patch
+
+# Define the legend labels and corresponding colors
+legend_labels = ["vGLUT2+: OPRM1+", "vGLUT2+: OPRM1-"]
+custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
+
+# Create a separate figure for the legend
+legend_fig = plt.figure(figsize=(3, 2))  # Adjust size as needed
+legend_ax = legend_fig.add_subplot(111)
+legend_ax.axis("off")  # Turn off axes for the legend figure
+
+# Create legend patches (color-label pairs)
+legend_patches = [
+    Patch(color=custom_colors[0], label=legend_labels[0]),
+    Patch(color=custom_colors[1], label=legend_labels[1])
+]
+
+# Create the legend using the patches
+legend_ax.legend(
+    handles=legend_patches,
+    loc="center",
+    title="Cell Types",
+    frameon=True  # Add a box around the legend
+)
+
+# Save the legend as its own image
+legend_file_path = os.path.join(base_dir, "legend_only.png")
+legend_fig.savefig(legend_file_path, bbox_inches="tight")
+plt.close(legend_fig)  # Close the legend figure to free memory
+
+
+
+# Create aggregated pie chart
+fig = plt.figure(figsize=(8, 8))
+plt.pie(
+    [double_positive, vglut2_only],
+    autopct="%1.1f%%",
+    startangle=90,
+    colors=custom_colors,
+    wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+)
+plt.title(f"Proportion of OPRM1+ to vGLUT2+ Cells (Aggregated)")
+plt.axis("equal")
+
+aggregated_file_path = os.path.join(aggregated_dir, "Aggregated_PieChart.png")
+plt.savefig(aggregated_file_path, bbox_inches="tight")
+plt.close(fig)  # Close the figure to free memory
+
+
 
 # Write the results to CSV and XLSX
 DataDraft.to_csv("vglut2_oprm1_subcellular_metrics.csv", index=False)
