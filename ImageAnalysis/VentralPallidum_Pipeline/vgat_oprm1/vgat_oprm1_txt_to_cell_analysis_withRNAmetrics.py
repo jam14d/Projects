@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 ##SPECIFIC TO VGAT2: OPRM1 COMPOSITE
 ##IN PROGRESS!
@@ -12,6 +14,15 @@ paths = {
     "detection_csv": r"/Volumes/backup driv/VP_qp_LF - ITERATION4 - VGAT_OPRM1_COMPOSITE/detections_iteration4_vgatwithMu_12.13.24_CSV",
     "annotation_csv": r"/Volumes/backup driv/VP_qp_LF - ITERATION4 - VGAT_OPRM1_COMPOSITE/annotations_iteration4_vgatwithMu_12.13.24_CSV"
 }
+
+# Define directories for saving pie charts
+base_dir = "/Volumes/backup driv/VP_qp_LF - ITERATION4 - VGAT_OPRM1_COMPOSITE"
+per_image_dir = os.path.join(base_dir, "PieCharts_Per_Image")
+aggregated_dir = os.path.join(base_dir, "PieChart_Aggregated")
+
+# Ensure the directories exist
+os.makedirs(per_image_dir, exist_ok=True)
+os.makedirs(aggregated_dir, exist_ok=True)
 
 # Function to convert Windows paths to Unix-like paths if running in a Unix environment
 def convert_to_unix_path(win_path):
@@ -47,10 +58,7 @@ convert_text_to_csv(paths["raw_annotation"], paths["annotation_csv"])
 # Get all converted detection CSV files
 filelist = [f for f in os.listdir(paths["detection_csv"]) if f.endswith(".csv")]
 
-# Define Qupath colors and classifications
-QYellow = "AF568"
-QPBlue = "AF647"
-
+# Define VGAT colors and classifications
 Yellow_posName = "oprm1_Pos"
 Yellow_posName_2 = "vgat_Neg: oprm1_Pos"
 Blue_posName = "vgat_Pos"
@@ -103,42 +111,42 @@ for k, file in enumerate(filelist):
         ano_data = pd.read_csv(ano_file)
 
         # Subset data for specific cell populations
-        QPYellow_only = det_data[det_data['Classification'].isin([Yellow_posName, Yellow_posName_2])]
-        QPblue_only = det_data[det_data['Classification'].isin([Blue_posName, Blue_posName_2])]
-        QPboth = det_data[det_data['Classification'] == double_positive]
-        QPnone = det_data[det_data['Classification'] == double_negative]
+        Yellow_only = det_data[det_data['Classification'].isin([Yellow_posName, Yellow_posName_2])]
+        Blue_only = det_data[det_data['Classification'].isin([Blue_posName, Blue_posName_2])]
+        Both = det_data[det_data['Classification'] == double_positive]
+        None_cells = det_data[det_data['Classification'] == double_negative]
 
         # Calculate areas and statistics
-        posYellowArea = QPYellow_only['Cell: Area µm^2'].sum() / 1e6 if not QPYellow_only.empty else 0
-        posBlueArea = QPblue_only['Cell: Area µm^2'].sum() / 1e6 if not QPblue_only.empty else 0
-        posBothArea = QPboth['Cell: Area µm^2'].sum() / 1e6 if not QPboth.empty else 0
-        posNoneArea = QPnone['Cell: Area µm^2'].sum() / 1e6 if not QPnone.empty else 0
+        posYellowArea = Yellow_only['Cell: Area µm^2'].sum() / 1e6 if not Yellow_only.empty else 0
+        posBlueArea = Blue_only['Cell: Area µm^2'].sum() / 1e6 if not Blue_only.empty else 0
+        posBothArea = Both['Cell: Area µm^2'].sum() / 1e6 if not Both.empty else 0
+        posNoneArea = None_cells['Cell: Area µm^2'].sum() / 1e6 if not None_cells.empty else 0
         totalCellArea = posYellowArea + posBlueArea + posBothArea
 
         realAnnotations = ano_data[ano_data['Object type'].isin(["Annotation", "PathAnnotationObject"])]
         anoArea = realAnnotations['Area µm^2'].sum() / 1e6 if not realAnnotations.empty else 0
 
-        YellowIntensity = QPYellow_only['AF568: Cell: Mean'].mean() if not QPYellow_only.empty else None
-        blueIntensity = QPblue_only['AF647: Cell: Mean'].mean() if not QPblue_only.empty else None
+        YellowIntensity = Yellow_only['AF568: Cell: Mean'].mean() if not Yellow_only.empty else None
+        BlueIntensity = Blue_only['AF647: Cell: Mean'].mean() if not Blue_only.empty else None
 
-        YellowCellCount = len(QPYellow_only)
-        blueCellCount = len(QPblue_only)
-        bothCellCount = len(QPboth)
-        noneCellCount = len(QPnone)
-        totalCells = YellowCellCount + blueCellCount + bothCellCount
+        YellowCellCount = len(Yellow_only)
+        BlueCellCount = len(Blue_only)
+        bothCellCount = len(Both)
+        noneCellCount = len(None_cells)
+        totalCells = YellowCellCount + BlueCellCount + bothCellCount + noneCellCount
 
         YellowPercentage = (YellowCellCount / totalCells * 100) if totalCells > 0 else None
-        bluePercentage = (blueCellCount / totalCells * 100) if totalCells > 0 else None
+        BluePercentage = (BlueCellCount / totalCells * 100) if totalCells > 0 else None
         bothPercentage = (bothCellCount / totalCells * 100) if totalCells > 0 else None
         nonePercentage = (noneCellCount / totalCells * 100) if totalCells > 0 else None
 
         # Populate DataDraft
         DataDraft.loc[k, "Sample"] = filename
-        DataDraft.loc[k, "oprm1-: vgat+ Cell Density (cells/mm^2)"] = (blueCellCount / totalCellArea) if totalCellArea > 0 else None
-        DataDraft.loc[k, "oprm1-: vgat+ Cell Count"] = blueCellCount
+        DataDraft.loc[k, "oprm1-: vgat+ Cell Density (cells/mm^2)"] = (BlueCellCount / totalCellArea) if totalCellArea > 0 else None
+        DataDraft.loc[k, "oprm1-: vgat+ Cell Count"] = BlueCellCount
         DataDraft.loc[k, "oprm1-: vgat+ Cell Area (mm^2)"] = posBlueArea
-        DataDraft.loc[k, "oprm1-: vgat+ Cell Percentage"] = bluePercentage
-        DataDraft.loc[k, "oprm1-: vgat+ Intensity"] = blueIntensity
+        DataDraft.loc[k, "oprm1-: vgat+ Cell Percentage"] = BluePercentage
+        DataDraft.loc[k, "oprm1-: vgat+ Intensity"] = BlueIntensity
 
         DataDraft.loc[k, "oprm1+: vgat- Cell Density (cells/mm^2)"] = (YellowCellCount / totalCellArea) if totalCellArea > 0 else None
         DataDraft.loc[k, "oprm1+: vgat- Cell Count"] = YellowCellCount
@@ -157,6 +165,7 @@ for k, file in enumerate(filelist):
         DataDraft.loc[k, "Double Negative Cell Percentage"] = nonePercentage
 
         DataDraft.loc[k, "Total Cell Area (mm^2)"] = totalCellArea
+        DataDraft.loc[k, "Total Cell Count"] = totalCells
         DataDraft.loc[k, "Total Annotation Area (mm^2)"] = anoArea
 
         # Subcellular metrics
@@ -167,6 +176,48 @@ for k, file in enumerate(filelist):
 
     except Exception as e:
         print(f"Error processing {file}: {e}")
+
+# Define custom pastel colors
+custom_colors = ["#CBC3E3", "#80D8FF"]  # Orange-yellow and light blue
+legend_labels = ["VGAT+: OPRM1+", "VGAT+: OPRM1-"]
+
+# Generate pie chart for each image
+for idx, row in DataDraft.iterrows():
+    sample = row["Sample"]
+    double_positive = row["Double Positive Cell Count"]
+    vgat_only = row["oprm1-: vgat+ Cell Count"]
+
+    if pd.isna(double_positive) or pd.isna(vgat_only):
+        continue
+
+    fig = plt.figure(figsize=(8, 8))
+    plt.pie(
+        [double_positive, vgat_only],
+        autopct="%1.1f%%",
+        startangle=90,
+        colors=custom_colors,
+        wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+    )
+    #plt.title(f"Proportion of OPRM1+ to VGAT+ Cells for {sample}")
+    plt.axis("equal")
+
+    file_path = os.path.join(per_image_dir, f"{sample}_PieChart.png")
+    plt.savefig(file_path, bbox_inches="tight")
+    plt.close(fig)
+
+# Aggregated pie chart
+aggregated_file_path = os.path.join(aggregated_dir, "Aggregated_PieChart.png")
+plt.pie(
+    [DataDraft["Double Positive Cell Count"].sum(), DataDraft["oprm1-: vgat+ Cell Count"].sum()],
+    autopct="%1.1f%%",
+    startangle=90,
+    colors=custom_colors,
+    wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+)
+#plt.title("Proportion of OPRM1+ to VGAT+ Cells (Aggregated)")
+plt.axis("equal")
+plt.savefig(aggregated_file_path, bbox_inches="tight")
+plt.close()
 
 # Write the results to CSV and XLSX
 DataDraft.to_csv("vgat_oprm1_subcellular_metrics.csv", index=False)
