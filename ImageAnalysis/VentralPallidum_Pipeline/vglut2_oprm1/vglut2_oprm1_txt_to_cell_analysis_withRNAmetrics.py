@@ -182,87 +182,92 @@ for k, file in enumerate(filelist):
     except Exception as e:
         print(f"Error processing {file}: {e}")
 
-# Define custom pastel colors
-custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
-# Define the legend labels
-legend_labels = ["vGLUT2+: OPRM1+", "vGLUT2+: OPRM1-"]
+# # Define custom pastel colors
+# custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
+# # Define the legend labels
+# legend_labels = ["vGLUT2+: OPRM1+", "vGLUT2+: OPRM1-"]
 
 
 
-# Generate pie chart for each image
-for idx, row in DataDraft.iterrows():
-    sample = row["Sample"]
-    double_positive = row["Double Positive Cell Count"]
-    vglut2_only = row["oprm1-: vglut2+ Cell Count"]
+# # Generate pie chart for each image
+# for idx, row in DataDraft.iterrows():
+#     sample = row["Sample"]
+#     double_positive = row["Double Positive Cell Count"]
+#     vglut2_only = row["oprm1-: vglut2+ Cell Count"]
 
-    # Skip if data is missing
-    if pd.isna(double_positive) or pd.isna(vglut2_only):
-        continue
+#     # Skip if data is missing
+#     if pd.isna(double_positive) or pd.isna(vglut2_only):
+#         continue
 
-    # Create pie chart
-    fig = plt.figure(figsize=(8, 8))  # Explicitly store the figure
-    plt.pie(
-        [double_positive, vglut2_only],
-        autopct="%1.1f%%",
-        startangle=90,
-        colors=custom_colors,
-        wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
-    )
-    plt.title(f"Proportion of OPRM1+ to vGLUT2+ Cells for {sample}")
-    plt.axis("equal")
+#     # Create pie chart
+#     fig = plt.figure(figsize=(8, 8))  # Explicitly store the figure
+#     plt.pie(
+#         [double_positive, vglut2_only],
+#         autopct="%1.1f%%",
+#         startangle=90,
+#         colors=custom_colors,
+#         wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+#     )
+#     plt.title(f"Proportion of OPRM1+ to vGLUT2+ Cells for {sample}")
+#     plt.axis("equal")
 
-    # Save the pie chart and close the figure
-    file_path = os.path.join(per_image_dir, f"{sample}_PieChart.png")
-    plt.savefig(file_path, bbox_inches="tight")
-    plt.close(fig)  # Close the figure to free memory
+#     # Save the pie chart and close the figure
+#     file_path = os.path.join(per_image_dir, f"{sample}_PieChart.png")
+#     plt.savefig(file_path, bbox_inches="tight")
+#     plt.close(fig)  # Close the figure to free memory
 
-from matplotlib.patches import Patch
+# from matplotlib.patches import Patch
 
-# Define the legend labels and corresponding colors
-legend_labels = ["vGLUT2+: OPRM1+", "vGLUT2+: OPRM1-"]
-custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
+# # Define the legend labels and corresponding colors
+# legend_labels = ["vGLUT2+: OPRM1+", "vGLUT2+: OPRM1-"]
+# custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
 
-# Create a separate figure for the legend
-legend_fig = plt.figure(figsize=(3, 2))  # Adjust size as needed
-legend_ax = legend_fig.add_subplot(111)
-legend_ax.axis("off")  # Turn off axes for the legend figure
+# # Create a separate figure for the legend
+# legend_fig = plt.figure(figsize=(3, 2))  # Adjust size as needed
+# legend_ax = legend_fig.add_subplot(111)
+# legend_ax.axis("off")  # Turn off axes for the legend figure
 
-# Create legend patches (color-label pairs)
-legend_patches = [
-    Patch(color=custom_colors[0], label=legend_labels[0]),
-    Patch(color=custom_colors[1], label=legend_labels[1])
-]
+# # Create legend patches (color-label pairs)
+# legend_patches = [
+#     Patch(color=custom_colors[0], label=legend_labels[0]),
+#     Patch(color=custom_colors[1], label=legend_labels[1])
+# ]
 
-# Create the legend using the patches
-legend_ax.legend(
-    handles=legend_patches,
-    loc="center",
-    title="Cell Types",
-    frameon=True  # Add a box around the legend
-)
+# # Create the legend using the patches
+# legend_ax.legend(
+#     handles=legend_patches,
+#     loc="center",
+#     title="Cell Types",
+#     frameon=True  # Add a box around the legend
+# )
 
-# Save the legend as its own image
-legend_file_path = os.path.join(base_dir, "legend_only.png")
-legend_fig.savefig(legend_file_path, bbox_inches="tight")
-plt.close(legend_fig)  # Close the legend figure to free memory
+# # Save the legend as its own image
+# legend_file_path = os.path.join(base_dir, "legend_only.png")
+# legend_fig.savefig(legend_file_path, bbox_inches="tight")
+# plt.close(legend_fig)  # Close the legend figure to free memory
 
 
 
-# Create aggregated pie chart
-fig = plt.figure(figsize=(8, 8))
-plt.pie(
-    [double_positive, vglut2_only],
-    autopct="%1.1f%%",
-    startangle=90,
-    colors=custom_colors,
-    wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
-)
-plt.title(f"Proportion of OPRM1+ to vGLUT2+ Cells (Aggregated)")
-plt.axis("equal")
+# # Aggregate values for the pie chart
+# total_double_positive = DataDraft["Double Positive Cell Count"].sum()
+# total_vglut2_only = DataDraft["oprm1-: vglut2+ Cell Count"].sum()
 
-aggregated_file_path = os.path.join(aggregated_dir, "Aggregated_PieChart.png")
-plt.savefig(aggregated_file_path, bbox_inches="tight")
-plt.close(fig)  # Close the figure to free memory
+# # Create aggregated pie chart
+# fig = plt.figure(figsize=(8, 8))
+# plt.pie(
+#     [total_vglut2_only, total_double_positive],  # Corrected order
+#     autopct="%1.1f%%",
+#     startangle=90,
+#     colors=custom_colors,
+#     wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+# )
+# plt.title(f"Proportion of OPRM1+ to vGLUT2+ Cells (Aggregated)")
+# plt.axis("equal")
+
+# aggregated_file_path = os.path.join(aggregated_dir, "Aggregated_PieChart_Corrected.png")
+# plt.savefig(aggregated_file_path, bbox_inches="tight")
+# plt.close(fig)  # Close the figure to free memory
+
 
 
 
