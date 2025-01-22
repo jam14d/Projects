@@ -177,47 +177,48 @@ for k, file in enumerate(filelist):
     except Exception as e:
         print(f"Error processing {file}: {e}")
 
-# Define custom pastel colors
-custom_colors = ["#CBC3E3", "#80D8FF"]  # Orange-yellow and light blue
-legend_labels = ["VGAT+: OPRM1+", "VGAT+: OPRM1-"]
+#commenting out pie chart, need to fix
+# # Define custom pastel colors
+# custom_colors = ["#CBC3E3", "#80D8FF"]  # Orange-yellow and light blue
+# legend_labels = ["VGAT+: OPRM1+", "VGAT+: OPRM1-"]
 
-# Generate pie chart for each image
-for idx, row in DataDraft.iterrows():
-    sample = row["Sample"]
-    double_positive = row["Double Positive Cell Count"]
-    vgat_only = row["oprm1-: vgat+ Cell Count"]
+# # Generate pie chart for each image
+# for idx, row in DataDraft.iterrows():
+#     sample = row["Sample"]
+#     double_positive = row["Double Positive Cell Count"]
+#     vgat_only = row["oprm1-: vgat+ Cell Count"]
 
-    if pd.isna(double_positive) or pd.isna(vgat_only):
-        continue
+#     if pd.isna(double_positive) or pd.isna(vgat_only):
+#         continue
 
-    fig = plt.figure(figsize=(8, 8))
-    plt.pie(
-        [double_positive, vgat_only],
-        autopct="%1.1f%%",
-        startangle=90,
-        colors=custom_colors,
-        wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
-    )
-    #plt.title(f"Proportion of OPRM1+ to VGAT+ Cells for {sample}")
-    plt.axis("equal")
+#     fig = plt.figure(figsize=(8, 8))
+#     plt.pie(
+#         [double_positive, vgat_only],
+#         autopct="%1.1f%%",
+#         startangle=90,
+#         colors=custom_colors,
+#         wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+#     )
+#     #plt.title(f"Proportion of OPRM1+ to VGAT+ Cells for {sample}")
+#     plt.axis("equal")
 
-    file_path = os.path.join(per_image_dir, f"{sample}_PieChart.png")
-    plt.savefig(file_path, bbox_inches="tight")
-    plt.close(fig)
+#     file_path = os.path.join(per_image_dir, f"{sample}_PieChart.png")
+#     plt.savefig(file_path, bbox_inches="tight")
+#     plt.close(fig)
 
-# Aggregated pie chart
-aggregated_file_path = os.path.join(aggregated_dir, "Aggregated_PieChart.png")
-plt.pie(
-    [DataDraft["Double Positive Cell Count"].sum(), DataDraft["oprm1-: vgat+ Cell Count"].sum()],
-    autopct="%1.1f%%",
-    startangle=90,
-    colors=custom_colors,
-    wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
-)
-#plt.title("Proportion of OPRM1+ to VGAT+ Cells (Aggregated)")
-plt.axis("equal")
-plt.savefig(aggregated_file_path, bbox_inches="tight")
-plt.close()
+# # Aggregated pie chart
+# aggregated_file_path = os.path.join(aggregated_dir, "Aggregated_PieChart.png")
+# plt.pie(
+#     [DataDraft["Double Positive Cell Count"].sum(), DataDraft["oprm1-: vgat+ Cell Count"].sum()],
+#     autopct="%1.1f%%",
+#     startangle=90,
+#     colors=custom_colors,
+#     wedgeprops={'edgecolor': 'black', 'linewidth': 1.5},
+# )
+# #plt.title("Proportion of OPRM1+ to VGAT+ Cells (Aggregated)")
+# plt.axis("equal")
+# plt.savefig(aggregated_file_path, bbox_inches="tight")
+# plt.close()
 
 # Write the results to CSV and XLSX
 DataDraft.to_csv("vgat_oprm1_subcellular_metrics.csv", index=False)
