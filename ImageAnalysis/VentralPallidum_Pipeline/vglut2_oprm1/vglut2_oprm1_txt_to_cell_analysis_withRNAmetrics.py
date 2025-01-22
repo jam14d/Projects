@@ -182,6 +182,8 @@ for k, file in enumerate(filelist):
     except Exception as e:
         print(f"Error processing {file}: {e}")
 
+
+##NEED TO FIX
 # # Define custom pastel colors
 # custom_colors = ["#FFC080", "#FFDEE2"]  # Orange-yellow and light pastel pink
 # # Define the legend labels
