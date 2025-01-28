@@ -1,3 +1,7 @@
-Statistical Test Results:
+Statistical Test Results (Original Data):
 Mann-Whitney: Statistic = 1095956.5, p-value = 3.656996820480158e-10
 Kolmogorov-Smirnov: Statistic = 0.26015796489737364, p-value = 2.2300218106679915e-32
+
+Statistical Test Results (Trimmed Data):
+Mann-Whitney: Statistic = 655004.0, p-value = 2.84747059291679e-14
+Kolmogorov-Smirnov: Statistic = 0.2362517576937566, p-value = 9.435672145942204e-20
