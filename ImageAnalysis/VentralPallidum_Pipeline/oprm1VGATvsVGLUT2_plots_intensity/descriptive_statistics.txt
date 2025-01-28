@@ -1,0 +1,47 @@
+Descriptive Statistics for Original Data:
+
+vgat_positive_oprm1_positive:
+       AF568: Cell: Mean  Subcellular: Channel 2: Num spots estimated
+count        4246.000000                                  4246.000000
+mean          129.892897                                    47.802542
+std            28.517991                                    56.320838
+min            83.255200                                     6.735900
+25%           106.405725                                    14.709200
+50%           124.725550                                    26.548800
+75%           147.121775                                    57.197850
+max           320.218600                                   458.655900
+
+vglut2_positive_oprm1_positive:
+       AF568: Cell: Mean  Subcellular: Channel 2: Num spots estimated
+count         612.000000                                   612.000000
+mean          134.128134                                    28.505369
+std            19.820173                                    33.136219
+min            85.852900                                     7.130500
+25%           125.093525                                    12.327850
+50%           135.771750                                    18.998450
+75%           144.590025                                    30.464275
+max           249.704900                                   333.600400
+
+Descriptive Statistics for Trimmed Data:
+
+vgat_positive_oprm1_positive:
+       AF568: Cell: Mean  Subcellular: Channel 2: Num spots estimated
+count        2253.000000                                   2253.00000
+mean          146.521067                                     62.98392
+std            17.662818                                     50.54062
+min           120.028800                                      7.52520
+25%           132.480000                                     26.02360
+50%           143.856300                                     47.55190
+75%           157.404100                                     84.04730
+max           198.898500                                    330.76380
+
+vglut2_positive_oprm1_positive:
+       AF568: Cell: Mean  Subcellular: Channel 2: Num spots estimated
+count         476.000000                                   476.000000
+mean          139.176606                                    26.356109
+std            10.147262                                    19.605970
+min           120.105700                                     7.130500
+25%           131.886850                                    13.307825
+50%           138.995450                                    19.577100
+75%           145.395150                                    31.443525
+max           168.033300                                   106.322800

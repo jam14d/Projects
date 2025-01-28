@@ -38,14 +38,26 @@ classifications = {
     "vglut2_positive_oprm1_positive": ["vglut2_Pos: oprm1_Pos"],
 }
 colors = {
-    "vgat_positive_oprm1_positive": "green",
-    "vglut2_positive_oprm1_positive": "orange",
+    "vgat_positive_oprm1_positive": "#97d04f",
+    "vglut2_positive_oprm1_positive": "#efad4f",  # Shade of orange
 }
 
 # Initialize a dictionary to collect data for each classification
 data = {key: [] for key in classifications.keys()}
 
-# Helper function to process files and extract relevant data
+
+# Helper function to detect and remove outliers using the IQR method
+def remove_outliers(df, column):
+    if df.empty:
+        return df
+    Q1 = df[column].quantile(0.25)  # First quartile (25th percentile)
+    Q3 = df[column].quantile(0.75)  # Third quartile (75th percentile)
+    IQR = Q3 - Q1  # Interquartile range
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+
+# Updated helper function to process files and extract relevant data
 def collect_data(paths, classification_key, labels):
     for file in os.listdir(paths["raw_detection"]):
         if file.endswith(".txt"):
@@ -54,7 +66,10 @@ def collect_data(paths, classification_key, labels):
                 if "Classification" not in det_data.columns:
                     print(f"Skipping file {file}: 'Classification' column is missing.")
                     continue
+                # Filter by classification
                 cell_data = det_data[det_data["Classification"].isin(labels)]
+                
+                # Append filtered data
                 data[classification_key].append(cell_data[[
                     "AF568: Cell: Mean", 
                     "Subcellular: Channel 2: Num spots estimated"
@@ -64,96 +79,116 @@ def collect_data(paths, classification_key, labels):
             except Exception as e:
                 print(f"Error processing {file}: {e}")
 
-# Collect data for each classification
-collect_data(paths["vgat"], "vgat_positive_oprm1_positive", classifications["vgat_positive_oprm1_positive"])
-collect_data(paths["vglut2"], "vglut2_positive_oprm1_positive", classifications["vglut2_positive_oprm1_positive"])
-
-# Combine data for each classification into a single DataFrame
-for key in data:
-    if data[key]:
-        data[key] = pd.concat(data[key], ignore_index=True)
+# Collect original data (no thresholding)
+original_data = {key: [] for key in classifications.keys()}
+for group, labels in classifications.items():
+    if "vgat" in group:
+        collect_data(paths["vgat"], group, labels)
+    elif "vglut2" in group:
+        collect_data(paths["vglut2"], group, labels)
+    if data[group]:
+        original_data[group] = pd.concat(data[group], ignore_index=True)
     else:
-        data[key] = pd.DataFrame(columns=["AF568: Cell: Mean", "Subcellular: Channel 2: Num spots estimated"])
+        original_data[group] = pd.DataFrame(columns=["AF568: Cell: Mean", "Subcellular: Channel 2: Num spots estimated"])
 
-# Perform statistical tests between VGAT+ and VGLUT2+ groups
-vgat_data = data["vgat_positive_oprm1_positive"]
-vglut2_data = data["vglut2_positive_oprm1_positive"]
+# Apply threshold and collect trimmed data
+trimmed_data = {}
+for key, df in original_data.items():
+    filtered_df = df[df["AF568: Cell: Mean"] > 120]  # Apply intensity threshold
+    trimmed_data[key] = remove_outliers(filtered_df, "AF568: Cell: Mean")
 
-stat_results = {}
+# Function to compare plots before and after trimming
+def compare_plots(original_df, trimmed_df, column, title, color):
+    plt.figure(figsize=(16, 8))
+    
+    # Original data distribution (starting from 0)
+    plt.subplot(2, 2, 1)
+    sns.histplot(original_df[column], kde=True, bins=30, color=color, alpha=0.7)
+    plt.title(f"{title} (Original Data Distribution)")
+    plt.xlabel("OPRM1 Intensity")  # Updated label
+    plt.xlim(0, None)  # Start x-axis from 0
+    
+    plt.subplot(2, 2, 2)
+    sns.boxplot(x=original_df[column], color=color)
+    plt.title(f"{title} (Original Box Plot)")
+    plt.xlabel("OPRM1 Intensity")  # Updated label
+    plt.xlim(0, None)  # Start x-axis from 0
 
-if not vgat_data.empty and not vglut2_data.empty:
-    vgat_intensity = vgat_data["AF568: Cell: Mean"]
-    vglut2_intensity = vglut2_data["AF568: Cell: Mean"]
+    # Trimmed data distribution (starting from 0)
+    plt.subplot(2, 2, 3)
+    sns.histplot(trimmed_df[column], kde=True, bins=30, color=color, alpha=0.7)
+    plt.title(f"{title} (Trimmed Data Distribution)")
+    plt.xlabel("OPRM1 Intensity")  # Updated label
+    plt.xlim(115, None)  
+
+    plt.subplot(2, 2, 4)
+    sns.boxplot(x=trimmed_df[column], color=color)
+    plt.title(f"{title} (Trimmed Box Plot)")
+    plt.xlabel("OPRM1 Intensity")  # Updated label
+    plt.xlim(115, None)  
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(plots_dir, f"{title.replace(' ', '_')}_comparison.png"))
+    plt.close()
+
+# Generate comparison plots for VGAT and VGLUT2
+compare_plots(original_data["vgat_positive_oprm1_positive"], trimmed_data["vgat_positive_oprm1_positive"], 
+              "AF568: Cell: Mean", "VGAT+ OPRM1+", colors["vgat_positive_oprm1_positive"])
+compare_plots(original_data["vglut2_positive_oprm1_positive"], trimmed_data["vglut2_positive_oprm1_positive"], 
+              "AF568: Cell: Mean", "VGLUT2+ OPRM1+", colors["vglut2_positive_oprm1_positive"])
+
+# Perform statistical tests between VGAT+ and VGLUT2+ groups for both original and trimmed data
+stat_results = {"original": {}, "trimmed": {}}
+
+# Statistical tests for original data
+if not original_data["vgat_positive_oprm1_positive"].empty and not original_data["vglut2_positive_oprm1_positive"].empty:
+    vgat_original = original_data["vgat_positive_oprm1_positive"]["AF568: Cell: Mean"]
+    vglut2_original = original_data["vglut2_positive_oprm1_positive"]["AF568: Cell: Mean"]
+
+    # Mann-Whitney U Test (original)
+    u_stat, u_p_value = mannwhitneyu(vgat_original, vglut2_original, alternative='two-sided')
+    stat_results["original"]["Mann-Whitney"] = (u_stat, u_p_value)
+
+    # Kolmogorov-Smirnov Test (original)
+    ks_stat, ks_p_value = ks_2samp(vgat_original, vglut2_original)
+    stat_results["original"]["Kolmogorov-Smirnov"] = (ks_stat, ks_p_value)
+
+# Statistical tests for trimmed data
+if not trimmed_data["vgat_positive_oprm1_positive"].empty and not trimmed_data["vglut2_positive_oprm1_positive"].empty:
+    vgat_trimmed = trimmed_data["vgat_positive_oprm1_positive"]["AF568: Cell: Mean"]
+    vglut2_trimmed = trimmed_data["vglut2_positive_oprm1_positive"]["AF568: Cell: Mean"]
 
     # Mann-Whitney U Test
-    u_stat, u_p_value = mannwhitneyu(vgat_intensity, vglut2_intensity, alternative='two-sided')
-    stat_results["Mann-Whitney"] = (u_stat, u_p_value)
+    u_stat, u_p_value = mannwhitneyu(vgat_trimmed, vglut2_trimmed, alternative='two-sided')
+    stat_results["trimmed"]["Mann-Whitney"] = (u_stat, u_p_value)
 
     # Kolmogorov-Smirnov Test
-    ks_stat, ks_p_value = ks_2samp(vgat_intensity, vglut2_intensity)
-    stat_results["Kolmogorov-Smirnov"] = (ks_stat, ks_p_value)
+    ks_stat, ks_p_value = ks_2samp(vgat_trimmed, vglut2_trimmed)
+    stat_results["trimmed"]["Kolmogorov-Smirnov"] = (ks_stat, ks_p_value)
 
-    # Save results to a text file
-    stats_results_path = os.path.join(plots_dir, "statistical_tests_results.txt")
-    with open(stats_results_path, "w") as f:
-        f.write("Statistical Test Results:\n")
-        for test_name, (stat, p_val) in stat_results.items():
-            f.write(f"{test_name}: Statistic = {stat}, p-value = {p_val}\n")
-    print(f"Statistical test results saved to {stats_results_path}")
+# Save results to a text file
+stats_results_path = os.path.join(plots_dir, "statistical_tests_results.txt")
+with open(stats_results_path, "w") as f:
+    f.write("Statistical Test Results (Original Data):\n")
+    for test_name, (stat, p_val) in stat_results["original"].items():
+        f.write(f"{test_name}: Statistic = {stat}, p-value = {p_val}\n")
+    f.write("\nStatistical Test Results (Trimmed Data):\n")
+    for test_name, (stat, p_val) in stat_results["trimmed"].items():
+        f.write(f"{test_name}: Statistic = {stat}, p-value = {p_val}\n")
 
-# KDE Plot
-comparison_data = []
-for cell_type, df in data.items():
-    if not df.empty:
-        comparison_data.extend([{"Cell Type": cell_type.replace("_", " ").title(), "Intensity": val} for val in df["AF568: Cell: Mean"]])
+# Generate descriptive statistics for original and trimmed data
+descriptive_stats_path = os.path.join(plots_dir, "descriptive_statistics.txt")
+with open(descriptive_stats_path, "w") as f:
+    f.write("Descriptive Statistics for Original Data:\n")
+    for key, df in original_data.items():
+        f.write(f"\n{key}:\n")
+        f.write(df.describe().to_string())
+        f.write("\n")
+    f.write("\nDescriptive Statistics for Trimmed Data:\n")
+    for key, df in trimmed_data.items():
+        f.write(f"\n{key}:\n")
+        f.write(df.describe().to_string())
+        f.write("\n")
 
-if comparison_data:
-    comparison_df = pd.DataFrame(comparison_data)
-
-    plt.figure(figsize=(10, 6))
-    for cell_type, df in data.items():
-        if not df.empty:
-            sns.kdeplot(df["AF568: Cell: Mean"], label=cell_type.replace("_", ":").title(), color=colors[cell_type], fill=True, alpha=0.5)
-
-    plt.title("Density Distribution of OPRM1 Intensity for VGAT+:OPRM1+ and VGLUT2+:OPRM1+ Cells", fontsize=12)
-    plt.xlabel("OPRM1 Intensity")
-    plt.ylabel("Density")
-    plt.legend(title="Cell Type")
-    plt.tight_layout()
-
-    kde_path = os.path.join(plots_dir, "KDE_Comparison_VGAT_vs_VGLUT2.png")
-    plt.savefig(kde_path)
-    plt.close()
-    print(f"KDE comparison plot saved to {kde_path}.")
-
-#boxplot
-# Define a formatted palette that matches the DataFrame's "Cell Type" column
-formatted_colors = {
-    "Vgat Positive Oprm1 Positive": "green",
-    "Vglut2 Positive Oprm1 Positive": "orange",
-}
-
-# Box Plot with Statistical Annotation
-plt.figure(figsize=(10, 6))
-ax = sns.boxplot(
-    data=comparison_df,
-    x="Cell Type",
-    y="Intensity",
-    palette=formatted_colors  # Use the corrected palette
-)
-
-# Annotator setup
-pairs = [("Vgat Positive Oprm1 Positive", "Vglut2 Positive Oprm1 Positive")]
-annotator = Annotator(ax, pairs, data=comparison_df, x="Cell Type", y="Intensity")
-annotator.set_pvalues([u_p_value])  # Use the Mann-Whitney U-test p-value
-annotator.annotate()
-
-plt.title("Comparative Distribution of OPRM1 Intensity for VGAT+ and VGLUT2+ Cells", fontsize=16)
-plt.xlabel("Cell Type")
-plt.ylabel("OPRM1 Intensity")
-plt.tight_layout()
-
-box_plot_path = os.path.join(plots_dir, "Box_Comparison_VGAT_vs_VGLUT2_with_annotations.png")
-plt.savefig(box_plot_path)
-plt.close()
-print(f"Box plot with statistical annotations saved to {box_plot_path}.")
+print(f"Descriptive statistics saved to {descriptive_stats_path}")
+print(f"Statistical test results saved to {stats_results_path}")
