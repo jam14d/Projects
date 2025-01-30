@@ -134,7 +134,9 @@ with open(stats_file_path, "w") as stats_file:
 
             stats_file.write("\n")
 
-# Visualization
+
+
+#Visualization
 subpop_comparison = []
 for cell_type, df in data.items():
     if not df.empty:
@@ -146,19 +148,34 @@ for cell_type, df in data.items():
 if subpop_comparison:
     subpop_comparison_df = pd.DataFrame(subpop_comparison)
 
-    # Scatter plots
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(
+    # # Scatter plots
+    # plt.figure(figsize=(10, 6))
+    # sns.scatterplot(
+    #     data=subpop_comparison_df,
+    #     x="Puncta",
+    #     y="Intensity",
+    #     hue="Cell Type",
+    #     palette="Set2",
+    #     alpha=0.7
+    # )
+    # plt.title("Puncta vs Intensity: VGAT vs VGLUT2", fontsize=14)
+    # plt.xlabel("Puncta Count")
+    # plt.ylabel("Intensity")
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_Scatter.png"))
+    # plt.close()
+
+# Joint plot for Puncta vs. Intensity
+if not subpop_comparison_df.empty:
+    joint_plot = sns.jointplot(
         data=subpop_comparison_df,
-        x="Puncta",
-        y="Intensity",
+        x="Intensity",
+        y="Puncta",
         hue="Cell Type",
-        palette="Set2",
-        alpha=0.7
+        kind="kde",
+        palette="Set2"
     )
-    plt.title("Puncta vs Intensity: VGAT vs VGLUT2", fontsize=14)
-    plt.xlabel("Puncta Count")
-    plt.ylabel("Intensity")
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_Scatter.png"))
+
+    #joint_plot.fig.suptitle("Joint Distribution of Puncta vs. Intensity", fontsize=12)
+    joint_plot.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_JointPlot.png"))
     plt.close()
