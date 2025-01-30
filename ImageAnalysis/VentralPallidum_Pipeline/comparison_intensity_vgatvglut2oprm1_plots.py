@@ -3,6 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import mannwhitneyu, ks_2samp
+from scipy.signal import find_peaks
+from scipy.stats import gaussian_kde
+import numpy as np
 from statannotations.Annotator import Annotator
 
 # Define paths for VGAT and VGLUT2 data
@@ -57,6 +60,29 @@ def remove_outliers(df, column):
     upper_bound = Q3 + 1.5 * IQR
     return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
+
+# Function to calculate the threshold (valley between peaks) dynamically
+def calculate_threshold(df, column):
+    if df.empty:
+        return None
+    
+    # Fit KDE
+    kde = gaussian_kde(df[column])
+    x = np.linspace(df[column].min(), df[column].max(), 1000)
+    y = kde(x)
+    
+    # Find peaks and valleys
+    peaks, _ = find_peaks(y)
+    valleys, _ = find_peaks(-y)
+
+    if len(valleys) > 0:
+        # Select the first valley as the threshold (or customize based on domain knowledge)
+        threshold = x[valleys[0]]
+        return threshold
+    else:
+        return None  # Return None if no valleys are found
+
+
 # Updated helper function to process files and extract relevant data
 def collect_data(paths, classification_key, labels):
     for file in os.listdir(paths["raw_detection"]):
@@ -91,51 +117,135 @@ for group, labels in classifications.items():
     else:
         original_data[group] = pd.DataFrame(columns=["AF568: Cell: Mean", "Subcellular: Channel 2: Num spots estimated"])
 
-# Apply threshold and collect trimmed data
+# Calculate thresholds for VGAT and VGLUT2
+thresholds = {}
+for key, df in original_data.items():
+    thresholds[key] = calculate_threshold(df, "AF568: Cell: Mean")
+    print(f"Threshold for {key}: {thresholds[key]}")
+
+
+# Apply dynamic thresholds to trim data
 trimmed_data = {}
 for key, df in original_data.items():
-    filtered_df = df[df["AF568: Cell: Mean"] > 120]  # Apply intensity threshold
-    trimmed_data[key] = remove_outliers(filtered_df, "AF568: Cell: Mean")
+    if thresholds[key] is not None:
+        filtered_df = df[df["AF568: Cell: Mean"] > thresholds[key]]  # Apply calculated threshold
+        trimmed_data[key] = remove_outliers(filtered_df, "AF568: Cell: Mean")
+    else:
+        trimmed_data[key] = pd.DataFrame()  # Empty DataFrame if no threshold found
 
-# Function to compare plots before and after trimming
-def compare_plots(original_df, trimmed_df, column, title, color):
+
+# # Function to compare plots before and after trimming
+# def compare_plots(original_df, trimmed_df, column, title, color):
+#     plt.figure(figsize=(16, 8))
+    
+#     # Original data distribution (starting from 0)
+#     plt.subplot(2, 2, 1)
+#     sns.histplot(original_df[column], kde=True, bins=30, color=color, alpha=0.7)
+#     plt.title(f"{title} (Original Data Distribution)")
+#     plt.xlabel("OPRM1 Intensity")  # Updated label
+#     plt.xlim(0, None)  # Start x-axis from 0
+    
+#     plt.subplot(2, 2, 2)
+#     sns.boxplot(x=original_df[column], color=color)
+#     plt.title(f"{title} (Original Box Plot)")
+#     plt.xlabel("OPRM1 Intensity")  # Updated label
+#     plt.xlim(0, None)  # Start x-axis from 0
+
+#     # Trimmed data distribution (starting from 0)
+#     plt.subplot(2, 2, 3)
+#     sns.histplot(trimmed_df[column], kde=True, bins=30, color=color, alpha=0.7)
+#     plt.title(f"{title} (Trimmed Data Distribution)")
+#     plt.xlabel("OPRM1 Intensity")  # Updated label
+#     plt.xlim(115, None)  
+
+#     plt.subplot(2, 2, 4)
+#     sns.boxplot(x=trimmed_df[column], color=color)
+#     plt.title(f"{title} (Trimmed Box Plot)")
+#     plt.xlabel("OPRM1 Intensity")  # Updated label
+#     plt.xlim(115, None)  
+
+#     plt.tight_layout()
+#     plt.savefig(os.path.join(plots_dir, f"{title.replace(' ', '_')}_comparison.png"))
+#     plt.close()
+
+# Function to compare plots before and after trimming, with peaks and thresholds
+def compare_plots_with_peaks_and_threshold(original_df, trimmed_df, column, title, color, threshold):
     plt.figure(figsize=(16, 8))
     
-    # Original data distribution (starting from 0)
+    # Original Data Distribution
     plt.subplot(2, 2, 1)
-    sns.histplot(original_df[column], kde=True, bins=30, color=color, alpha=0.7)
+    sns.histplot(original_df[column], kde=True, bins=30, color=color, alpha=0.7, label="Histogram")
     plt.title(f"{title} (Original Data Distribution)")
-    plt.xlabel("OPRM1 Intensity")  # Updated label
-    plt.xlim(0, None)  # Start x-axis from 0
+    plt.xlabel("OPRM1 Intensity")
+    plt.xlim(0, None)
     
+    # Add KDE and annotate peaks/thresholds
+    kde = gaussian_kde(original_df[column])
+    x = np.linspace(original_df[column].min(), original_df[column].max(), 1000)
+    y = kde(x)
+    peaks, _ = find_peaks(y)
+    valleys, _ = find_peaks(-y)
+
+    # Plot KDE
+    plt.plot(x, y, color="blue", label="KDE", alpha=0.8)
+    
+    # Annotate Peaks
+    for peak in peaks:
+        plt.axvline(x[peak], color="green", linestyle="--", label=f"Peak @ {x[peak]:.2f}")
+        plt.text(x[peak], y[peak] + 0.005, f"Peak: {x[peak]:.2f}", color="green", fontsize=8)
+    
+    # Annotate Threshold
+    if threshold is not None:
+        plt.axvline(threshold, color="red", linestyle="--", label=f"Threshold @ {threshold:.2f}")
+        plt.text(threshold, max(y) * 0.8, f"Threshold: {threshold:.2f}", color="red", fontsize=10)
+
+    plt.legend()
+
+    # Box Plot for Original Data
     plt.subplot(2, 2, 2)
     sns.boxplot(x=original_df[column], color=color)
     plt.title(f"{title} (Original Box Plot)")
-    plt.xlabel("OPRM1 Intensity")  # Updated label
-    plt.xlim(0, None)  # Start x-axis from 0
+    plt.xlabel("OPRM1 Intensity")
+    plt.xlim(0, None)
 
-    # Trimmed data distribution (starting from 0)
+    # Trimmed Data Distribution
     plt.subplot(2, 2, 3)
-    sns.histplot(trimmed_df[column], kde=True, bins=30, color=color, alpha=0.7)
+    sns.histplot(trimmed_df[column], kde=True, bins=30, color=color, alpha=0.7, label="Histogram")
     plt.title(f"{title} (Trimmed Data Distribution)")
-    plt.xlabel("OPRM1 Intensity")  # Updated label
-    plt.xlim(115, None)  
+    plt.xlabel("OPRM1 Intensity")
+    plt.xlim(threshold - 5 if threshold else 0, None)
 
+    # Box Plot for Trimmed Data
     plt.subplot(2, 2, 4)
     sns.boxplot(x=trimmed_df[column], color=color)
     plt.title(f"{title} (Trimmed Box Plot)")
-    plt.xlabel("OPRM1 Intensity")  # Updated label
-    plt.xlim(115, None)  
-
+    plt.xlabel("OPRM1 Intensity")
+    plt.xlim(threshold - 5 if threshold else 0, None)
+    
     plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, f"{title.replace(' ', '_')}_comparison.png"))
+    plt.savefig(os.path.join(plots_dir, f"{title.replace(' ', '_')}_peaks_thresholds.png"))
     plt.close()
 
-# Generate comparison plots for VGAT and VGLUT2
-compare_plots(original_data["vgat_positive_oprm1_positive"], trimmed_data["vgat_positive_oprm1_positive"], 
-              "AF568: Cell: Mean", "VGAT+ OPRM1+", colors["vgat_positive_oprm1_positive"])
-compare_plots(original_data["vglut2_positive_oprm1_positive"], trimmed_data["vglut2_positive_oprm1_positive"], 
-              "AF568: Cell: Mean", "VGLUT2+ OPRM1+", colors["vglut2_positive_oprm1_positive"])
+# Generate comparison plots for VGAT and VGLUT2 with peaks and thresholds
+compare_plots_with_peaks_and_threshold(original_data["vgat_positive_oprm1_positive"], 
+                                       trimmed_data["vgat_positive_oprm1_positive"], 
+                                       "AF568: Cell: Mean", 
+                                       "VGAT+ OPRM1+", 
+                                       colors["vgat_positive_oprm1_positive"], 
+                                       thresholds["vgat_positive_oprm1_positive"])
+
+compare_plots_with_peaks_and_threshold(original_data["vglut2_positive_oprm1_positive"], 
+                                       trimmed_data["vglut2_positive_oprm1_positive"], 
+                                       "AF568: Cell: Mean", 
+                                       "VGLUT2+ OPRM1+", 
+                                       colors["vglut2_positive_oprm1_positive"], 
+                                       thresholds["vglut2_positive_oprm1_positive"])
+
+# # Generate comparison plots for VGAT and VGLUT2
+# compare_plots(original_data["vgat_positive_oprm1_positive"], trimmed_data["vgat_positive_oprm1_positive"], 
+#               "AF568: Cell: Mean", "VGAT+ OPRM1+", colors["vgat_positive_oprm1_positive"])
+# compare_plots(original_data["vglut2_positive_oprm1_positive"], trimmed_data["vglut2_positive_oprm1_positive"], 
+#               "AF568: Cell: Mean", "VGLUT2+ OPRM1+", colors["vglut2_positive_oprm1_positive"])
 
 # Perform statistical tests between VGAT+ and VGLUT2+ groups for both original and trimmed data
 stat_results = {"original": {}, "trimmed": {}}
