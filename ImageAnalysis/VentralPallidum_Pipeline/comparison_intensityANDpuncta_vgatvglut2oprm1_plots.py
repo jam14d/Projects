@@ -1,3 +1,29 @@
+# Helper function to detect and remove outliers using the IQR method
+def remove_outliers(df, column):
+    if df.empty:
+        return df
+
+# Function to calculate the threshold (valley between peaks) dynamically
+def calculate_threshold(df, column):
+    if df.empty:
+        return None
+    
+    # Fit KDE
+    kde = gaussian_kde(df[column])
+    x = np.linspace(df[column].min(), df[column].max(), 1000)
+    y = kde(x)
+    
+    # Find peaks and valleys
+    peaks, _ = find_peaks(y)
+    valleys, _ = find_peaks(-y)
+
+    if len(valleys) > 0:
+        # Select the first valley as the threshold (or customize based on domain knowledge)
+        threshold = x[valleys[0]]
+        return threshold
+
+
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -120,7 +146,7 @@ with open(stats_file_path, "w") as stats_file:
 
             df["Subpopulation"] = pd.cut(
                 df["AF568: Cell: Mean"],
-                bins=[-float("inf"), 150, float("inf")],
+                bins=[-float("inf"), 120, float("inf")],
                 labels=["Low Intensity", "High Intensity"]
             ).astype(str) + " | " + pd.cut(
                 df["Num spots"],
@@ -134,19 +160,41 @@ with open(stats_file_path, "w") as stats_file:
 
             stats_file.write("\n")
 
-
+# Define a mapping of internal names to display names
+cell_type_rename = {
+    "vgat_positive_oprm1_positive": "VGAT+: OPRM1+",
+    "vglut2_positive_oprm1_positive": "VGLUT2+: OPRM1+"
+}
 
 #Visualization
 subpop_comparison = []
 for cell_type, df in data.items():
     if not df.empty:
         subpop_comparison.extend([
-            {"Cell Type": cell_type.replace("_", " ").title(), "Intensity": row["AF568: Cell: Mean"], "Puncta": row["Num spots"]}
+            {"Cell Type": cell_type, "Intensity": row["AF568: Cell: Mean"], "Puncta": row["Num spots"]}
             for _, row in df.iterrows()
         ])
 
 if subpop_comparison:
     subpop_comparison_df = pd.DataFrame(subpop_comparison)
+    
+    # Apply renaming correctly
+    subpop_comparison_df["Cell Type Display"] = subpop_comparison_df["Cell Type"].map(cell_type_rename)
+
+    # Joint plot for Puncta vs. Intensity
+    joint_plot = sns.jointplot(
+        data=subpop_comparison_df,
+        x="Intensity",
+        y="Puncta",
+        hue="Cell Type Display",  # Correctly mapped names
+        kind="kde",
+        palette="Set2"
+    )
+
+    joint_plot.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_JointPlot.png"))
+    plt.close()
+
+
 
     # # Scatter plots
     # plt.figure(figsize=(10, 6))
@@ -165,17 +213,4 @@ if subpop_comparison:
     # plt.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_Scatter.png"))
     # plt.close()
 
-# Joint plot for Puncta vs. Intensity
-if not subpop_comparison_df.empty:
-    joint_plot = sns.jointplot(
-        data=subpop_comparison_df,
-        x="Intensity",
-        y="Puncta",
-        hue="Cell Type",
-        kind="kde",
-        palette="Set2"
-    )
 
-    #joint_plot.fig.suptitle("Joint Distribution of Puncta vs. Intensity", fontsize=12)
-    joint_plot.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_JointPlot.png"))
-    plt.close()
