@@ -7,17 +7,3 @@ Intensity Comparison:
 Puncta Comparison:
   U-statistic: 1189209.5, p-value: 0.00016054198777284704
 
-Statistics for Vgat Positive Oprm1 Positive
-Total Cells: 4246
-  High Intensity | Low Puncta: 1376
-  Low Intensity | Low Puncta: 1110
-  High Intensity | High Puncta: 969
-  Low Intensity | High Puncta: 791
-
-Statistics for Vglut2 Positive Oprm1 Positive
-Total Cells: 612
-  High Intensity | Low Puncta: 256
-  High Intensity | High Puncta: 238
-  Low Intensity | High Puncta: 62
-  Low Intensity | Low Puncta: 56
-
