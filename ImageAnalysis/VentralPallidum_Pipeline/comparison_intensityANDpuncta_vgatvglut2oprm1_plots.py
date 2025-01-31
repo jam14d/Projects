@@ -229,7 +229,7 @@ if subpop_comparison:
             palette="vlag",  # Apply custom shades
             alpha=0.7
         )
-        plt.title("Puncta vs Intensity: VGAT vs VGLUT2_Thresholding Highlighted", fontsize=14)
+        plt.title("Puncta vs Intensity: VGAT vs VGLUT2 with Dynamic Binning", fontsize=14)
         plt.xlabel("Intensity")
         plt.ylabel("Puncta Count")
         plt.legend(title="Subpopulation", loc="upper right")
