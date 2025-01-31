@@ -1,0 +1,27 @@
+Descriptive Statistics for VGAT and VGLUT2
+==================================================
+
+Descriptive Stats for VGAT+: OPRM1+:
+Intensity (AF568: Cell: Mean):
+  Mean: 129.89, Median: 124.73
+  Std: 28.52, Min: 83.26, Max: 320.22
+  Q1: 106.41, Q3: 147.12
+
+Puncta (Num spots):
+  Mean: 2.63, Median: 1.00
+  Std: 2.80, Min: 1.00, Max: 28.81
+  Q1: 1.00, Q3: 3.55
+
+--------------------------------------------------
+Descriptive Stats for VGLUT2+: OPRM1+:
+Intensity (AF568: Cell: Mean):
+  Mean: 134.13, Median: 135.77
+  Std: 19.82, Min: 85.85, Max: 249.70
+  Q1: 125.09, Q3: 144.59
+
+Puncta (Num spots):
+  Mean: 3.05, Median: 1.00
+  Std: 3.23, Min: 1.00, Max: 26.05
+  Q1: 1.00, Q3: 3.95
+
+--------------------------------------------------

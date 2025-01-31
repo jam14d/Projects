@@ -1,29 +1,3 @@
-# Helper function to detect and remove outliers using the IQR method
-def remove_outliers(df, column):
-    if df.empty:
-        return df
-
-# Function to calculate the threshold (valley between peaks) dynamically
-def calculate_threshold(df, column):
-    if df.empty:
-        return None
-    
-    # Fit KDE
-    kde = gaussian_kde(df[column])
-    x = np.linspace(df[column].min(), df[column].max(), 1000)
-    y = kde(x)
-    
-    # Find peaks and valleys
-    peaks, _ = find_peaks(y)
-    valleys, _ = find_peaks(-y)
-
-    if len(valleys) > 0:
-        # Select the first valley as the threshold (or customize based on domain knowledge)
-        threshold = x[valleys[0]]
-        return threshold
-
-
-
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -61,6 +35,17 @@ def read_data(file_path):
     except UnicodeDecodeError:
         print(f"Error reading file {file_path}: Unable to decode.")
         return None
+
+# Helper function to detect and remove outliers using the IQR method
+def remove_outliers(df, column):
+    if df.empty:
+        return df
+    Q1 = df[column].quantile(0.25)  # First quartile (25th percentile)
+    Q3 = df[column].quantile(0.75)  # Third quartile (75th percentile)
+    IQR = Q3 - Q1  # Interquartile range
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
 # Collect intensity data
 def collect_intensity_data(raw_detection_path, labels):
@@ -138,37 +123,60 @@ with open(stats_file_path, "w") as stats_file:
         stats_file.write(f"Puncta Comparison:\n")
         stats_file.write(f"  U-statistic: {puncta_stats.statistic}, p-value: {puncta_stats.pvalue}\n\n")
 
-    # Write subpopulation statistics for each classification
+    # # Write subpopulation statistics for each classification
 
+    # for key, df in data.items():
+    #     if not df.empty:
+    #         stats_file.write(f"Statistics for {key.replace('_', ' ').title()}\n")
+    #         stats_file.write(f"Total Cells: {len(df)}\n")
 
-    for key, df in data.items():
-        if not df.empty:
-            stats_file.write(f"Statistics for {key.replace('_', ' ').title()}\n")
-            stats_file.write(f"Total Cells: {len(df)}\n")
+    #         df["Subpopulation"] = pd.cut(
+    #             df["AF568: Cell: Mean"],
+    #             bins=[-float("inf"), 120, float("inf")],
+    #             labels=["Low Intensity", "High Intensity"]
+    #         ).astype(str) + " | " + pd.cut(
+    #             df["Num spots"],
+    #             bins=[-float("inf"), 2, float("inf")],
+    #             labels=["Low Puncta", "High Puncta"]
+    #         ).astype(str)
 
-            df["Subpopulation"] = pd.cut(
-                df["AF568: Cell: Mean"],
-                bins=[-float("inf"), 120, float("inf")],
-                labels=["Low Intensity", "High Intensity"]
-            ).astype(str) + " | " + pd.cut(
-                df["Num spots"],
-                bins=[-float("inf"), 2, float("inf")],
-                labels=["Low Puncta", "High Puncta"]
-            ).astype(str)
+    #         subpop_counts = df["Subpopulation"].value_counts()
+    #         for subpop, count in subpop_counts.items():
+    #             stats_file.write(f"  {subpop}: {count}\n")
 
-            subpop_counts = df["Subpopulation"].value_counts()
-            for subpop, count in subpop_counts.items():
-                stats_file.write(f"  {subpop}: {count}\n")
-
-            stats_file.write("\n")
-
-
-
+    #         stats_file.write("\n")
+    
 # Define a mapping of internal names to display names
 cell_type_rename = {
     "vgat_positive_oprm1_positive": "VGAT+: OPRM1+",
     "vglut2_positive_oprm1_positive": "VGLUT2+: OPRM1+"
 }
+
+# ------------------------ Descriptive Statistics ------------------------
+descriptive_stats_path = os.path.join(plots_dir, "descriptive_statistics.txt")
+
+with open(descriptive_stats_path, "w") as stats_file:
+    stats_file.write("Descriptive Statistics for VGAT and VGLUT2\n")
+    stats_file.write("=" * 50 + "\n\n")
+
+    for key, df in data.items():
+        if not df.empty:
+            stats_file.write(f"Descriptive Stats for {cell_type_rename[key]}:\n")
+            
+            # Compute descriptive statistics
+            intensity_desc = df["AF568: Cell: Mean"].describe()
+            puncta_desc = df["Num spots"].describe()
+            
+            stats_file.write("Intensity (AF568: Cell: Mean):\n")
+            stats_file.write(f"  Mean: {intensity_desc['mean']:.2f}, Median: {intensity_desc['50%']:.2f}\n")
+            stats_file.write(f"  Std: {intensity_desc['std']:.2f}, Min: {intensity_desc['min']:.2f}, Max: {intensity_desc['max']:.2f}\n")
+            stats_file.write(f"  Q1: {intensity_desc['25%']:.2f}, Q3: {intensity_desc['75%']:.2f}\n\n")
+
+            stats_file.write("Puncta (Num spots):\n")
+            stats_file.write(f"  Mean: {puncta_desc['mean']:.2f}, Median: {puncta_desc['50%']:.2f}\n")
+            stats_file.write(f"  Std: {puncta_desc['std']:.2f}, Min: {puncta_desc['min']:.2f}, Max: {puncta_desc['max']:.2f}\n")
+            stats_file.write(f"  Q1: {puncta_desc['25%']:.2f}, Q3: {puncta_desc['75%']:.2f}\n\n")
+            stats_file.write("-" * 50 + "\n")
 
 
 #Visualization
@@ -187,56 +195,41 @@ if subpop_comparison:
     # Apply renaming correctly
     subpop_comparison_df["Cell Type"] = subpop_comparison_df["Cell Type"].map(cell_type_rename)
 
-    # Categorize subpopulations BEFORE filtering
-    subpop_comparison_df["Subpopulation"] = pd.cut(
-        subpop_comparison_df["Intensity"],
-        bins=[-float("inf"), 120, float("inf")],
-        labels=["Low Intensity", "High Intensity"]
-    ).astype(str) + " | " + pd.cut(
-        subpop_comparison_df["Puncta"],
-        bins=[-float("inf"), 2, float("inf")],
-        labels=["Low Puncta", "High Puncta"]
-    ).astype(str)
-
-    # Store a copy of the full dataset before applying the threshold
-    full_data_df = subpop_comparison_df.copy()
-
     # Apply filtering: Only include points with Puncta > 2 and Intensity > 120
     filtered_df = subpop_comparison_df[
         (subpop_comparison_df["Puncta"] > 2) & (subpop_comparison_df["Intensity"] > 120)
     ]
 
-    # Ensure we still have valid data
-    if not full_data_df.empty:
-        # **PLOT 1: Puncta vs. Intensity (colored by Cell Type)**
-        plt.figure(figsize=(10, 6))
-        sns.scatterplot(
-            data=full_data_df,
-            x="Intensity",
-            y="Puncta",
-            hue="Cell Type",
-            palette="Set2",
-            alpha=0.7
-        )
-        plt.title("Puncta vs Intensity: VGAT vs VGLUT2", fontsize=14)
-        plt.xlabel("Intensity")
-        plt.ylabel("Puncta Count")
-        plt.legend(title="Cell Type", loc="upper right")
-        plt.tight_layout()
-        plt.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_Scatter.png"))
-        plt.close()
+    # Dynamically determine thresholds using the median of the dataset
+    intensity_threshold = filtered_df["Intensity"].median()
+    puncta_threshold = filtered_df["Puncta"].median()
 
-        # **PLOT 2: Subpopulation Analysis (colored by Subpopulation Class)**
+    # Apply dynamic binning
+    filtered_df["Subpopulation"] = pd.cut(
+        filtered_df["Intensity"],
+        bins=[-float("inf"), intensity_threshold, float("inf")],
+        labels=["Low Intensity", "High Intensity"]
+    ).astype(str) + " | " + pd.cut(
+        filtered_df["Puncta"],
+        bins=[-float("inf"), puncta_threshold, float("inf")],
+        labels=["Low Puncta", "High Puncta"]
+    ).astype(str)
+
+    # Ensure we still have valid data
+    if not filtered_df.empty:
+
+        # **PLOT1: Subpopulation Analysis (colored by Subpopulation Class)**
+        ##WANT THIS TO EVENTUALLY BIN BY LOW VS. HIGH DYNAMICALLY
         plt.figure(figsize=(10, 6))
         sns.scatterplot(
-            data=full_data_df,
+            data=filtered_df,
             x="Intensity",
             y="Puncta",
             hue="Subpopulation",
-            palette=viridis,  # Apply custom green shades
+            palette="vlag",  # Apply custom shades
             alpha=0.7
         )
-        plt.title("Puncta vs Intensity: Subpopulation Analysis", fontsize=14)
+        plt.title("Puncta vs Intensity: VGAT vs VGLUT2_Thresholding Highlighted", fontsize=14)
         plt.xlabel("Intensity")
         plt.ylabel("Puncta Count")
         plt.legend(title="Subpopulation", loc="upper right")
@@ -249,7 +242,7 @@ if subpop_comparison:
 
     # Ensure there is data left after filtering for the joint plot
     if not filtered_df.empty:
-        # **PLOT 3: Joint plot (filtered Puncta > 2, Intensity > 120)**
+        # **PLOT2: Joint plot (filtered Puncta > 2, Intensity > 120)**
         joint_plot = sns.jointplot(
             data=filtered_df,
             x="Intensity",
