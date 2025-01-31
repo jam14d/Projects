@@ -41,8 +41,8 @@ classifications = {
     "vglut2_positive_oprm1_positive": ["vglut2_Pos: oprm1_Pos"],
 }
 colors = {
-    "vgat_positive_oprm1_positive": "#97d04f",
-    "vglut2_positive_oprm1_positive": "#efad4f",  # Shade of orange
+    "vgat_positive_oprm1_positive": "#81daca",
+    "vglut2_positive_oprm1_positive": "#ff8559",  # Shade of orange
 }
 
 # Initialize a dictionary to collect data for each classification
