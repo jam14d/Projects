@@ -139,6 +139,8 @@ with open(stats_file_path, "w") as stats_file:
         stats_file.write(f"  U-statistic: {puncta_stats.statistic}, p-value: {puncta_stats.pvalue}\n\n")
 
     # Write subpopulation statistics for each classification
+
+
     for key, df in data.items():
         if not df.empty:
             stats_file.write(f"Statistics for {key.replace('_', ' ').title()}\n")
@@ -160,11 +162,14 @@ with open(stats_file_path, "w") as stats_file:
 
             stats_file.write("\n")
 
+
+
 # Define a mapping of internal names to display names
 cell_type_rename = {
     "vgat_positive_oprm1_positive": "VGAT+: OPRM1+",
     "vglut2_positive_oprm1_positive": "VGLUT2+: OPRM1+"
 }
+
 
 #Visualization
 subpop_comparison = []
@@ -175,42 +180,84 @@ for cell_type, df in data.items():
             for _, row in df.iterrows()
         ])
 
+
 if subpop_comparison:
     subpop_comparison_df = pd.DataFrame(subpop_comparison)
-    
+
     # Apply renaming correctly
-    subpop_comparison_df["Cell Type Display"] = subpop_comparison_df["Cell Type"].map(cell_type_rename)
+    subpop_comparison_df["Cell Type"] = subpop_comparison_df["Cell Type"].map(cell_type_rename)
 
-    # Joint plot for Puncta vs. Intensity
-    joint_plot = sns.jointplot(
-        data=subpop_comparison_df,
-        x="Intensity",
-        y="Puncta",
-        hue="Cell Type Display",  # Correctly mapped names
-        kind="kde",
-        palette="Set2"
-    )
+    # Categorize subpopulations BEFORE filtering
+    subpop_comparison_df["Subpopulation"] = pd.cut(
+        subpop_comparison_df["Intensity"],
+        bins=[-float("inf"), 120, float("inf")],
+        labels=["Low Intensity", "High Intensity"]
+    ).astype(str) + " | " + pd.cut(
+        subpop_comparison_df["Puncta"],
+        bins=[-float("inf"), 2, float("inf")],
+        labels=["Low Puncta", "High Puncta"]
+    ).astype(str)
 
-    joint_plot.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_JointPlot.png"))
-    plt.close()
+    # Store a copy of the full dataset before applying the threshold
+    full_data_df = subpop_comparison_df.copy()
 
+    # Apply filtering: Only include points with Puncta > 2 and Intensity > 120
+    filtered_df = subpop_comparison_df[
+        (subpop_comparison_df["Puncta"] > 2) & (subpop_comparison_df["Intensity"] > 120)
+    ]
 
+    # Ensure we still have valid data
+    if not full_data_df.empty:
+        # **PLOT 1: Puncta vs. Intensity (colored by Cell Type)**
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(
+            data=full_data_df,
+            x="Intensity",
+            y="Puncta",
+            hue="Cell Type",
+            palette="Set2",
+            alpha=0.7
+        )
+        plt.title("Puncta vs Intensity: VGAT vs VGLUT2", fontsize=14)
+        plt.xlabel("Intensity")
+        plt.ylabel("Puncta Count")
+        plt.legend(title="Cell Type", loc="upper right")
+        plt.tight_layout()
+        plt.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_Scatter.png"))
+        plt.close()
 
-    # # Scatter plots
-    # plt.figure(figsize=(10, 6))
-    # sns.scatterplot(
-    #     data=subpop_comparison_df,
-    #     x="Puncta",
-    #     y="Intensity",
-    #     hue="Cell Type",
-    #     palette="Set2",
-    #     alpha=0.7
-    # )
-    # plt.title("Puncta vs Intensity: VGAT vs VGLUT2", fontsize=14)
-    # plt.xlabel("Puncta Count")
-    # plt.ylabel("Intensity")
-    # plt.tight_layout()
-    # plt.savefig(os.path.join(plots_dir, "VGAT_vs_VGLUT2_Scatter.png"))
-    # plt.close()
+        # **PLOT 2: Subpopulation Analysis (colored by Subpopulation Class)**
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(
+            data=full_data_df,
+            x="Intensity",
+            y="Puncta",
+            hue="Subpopulation",
+            palette=viridis,  # Apply custom green shades
+            alpha=0.7
+        )
+        plt.title("Puncta vs Intensity: Subpopulation Analysis", fontsize=14)
+        plt.xlabel("Intensity")
+        plt.ylabel("Puncta Count")
+        plt.legend(title="Subpopulation", loc="upper right")
+        plt.tight_layout()
+        plt.savefig(os.path.join(plots_dir, "Subpopulation_Scatter.png"))
+        plt.close()
 
+    else:
+        print("No data available for visualization.")
 
+    # Ensure there is data left after filtering for the joint plot
+    if not filtered_df.empty:
+        # **PLOT 3: Joint plot (filtered Puncta > 2, Intensity > 120)**
+        joint_plot = sns.jointplot(
+            data=filtered_df,
+            x="Intensity",
+            y="Puncta",
+            hue="Cell Type",  # Correctly mapped names
+            palette="Set2"
+        )
+        joint_plot.savefig(os.path.join(plots_dir, "Filtered_VGAT_vs_VGLUT2_JointPlot.png"))
+        plt.close()
+    else:
+        print("No data points meet the cutoff (Puncta > 2 and Intensity > 120). Skipping joint plot.")
