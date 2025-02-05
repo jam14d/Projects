@@ -3,7 +3,7 @@
 # **Image Analysis**
 
 ## **Overview**
-This folder contains a Whole-Slide Image Analysis for Intensity and Puncta Detection pipeline automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to refine raw data and extract meaningful insights. The goal is to ensure **robust quantification** while reducing noise and variability in biological image datasets.
+This folder contains a pipeline that automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to refine raw data and extract meaningful insights. The goal is to ensure **robust quantification** while reducing noise and variability in biological image datasets.
 
 ## **Key Applications**
 - **Automated data filtering**: Removes extreme values to improve statistical reliability.
