@@ -20,7 +20,7 @@ This folder contains a pipeline that automates the **processing, filtering, and 
 
 ## **Dependencies**
 Ensure the following Python libraries are installed:
-`pip install pandas numpy matplotlib seaborn scipy'
+`pip install pandas numpy matplotlib seaborn scipy`
 
 
 
