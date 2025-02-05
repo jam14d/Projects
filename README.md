@@ -1,50 +1,28 @@
 # Projects Repository
 
 ## Image Analysis
+# **Whole-Slide Image Analysis for Intensity and Puncta Detection**
 
-### Overview
-These projects are actively being developed to process whole slide images (WSI) using the StarDist model for nuclei segmentation and to classify breast cancer histopathological images. The primary focus is on binary classification of breast cancer histopathological images into benign and malignant categories using convolutional neural networks (CNNs). As these projects are ongoing, additional functionalities and improvements may be integrated over time.
+## **Overview**
+This pipeline automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to refine raw data and extract meaningful insights. The goal is to ensure **robust quantification** while reducing noise and variability in biological image datasets.
 
+## **Key Applications**
+- **Automated data filtering**: Removes extreme values to improve statistical reliability.
+- **Threshold optimization**: Dynamically identifies intensity cutoffs for feature detection.
+- **Comparative analysis**: Assesses differences between experimental groups using statistical tests.
+- **Data visualization**: Generates **publication-ready** plots for reporting findings.
 
-## Prerequisites
-Ensure Python 3 is installed on your system. Python can be downloaded from the official Python website.
+## **Features**
+- Loads **raw detection data** from whole-slide image analysis.
+- Identifies and removes **outliers** using an adaptive statistical approach.
+- Computes an **intensity threshold** for feature segmentation.
+- Performs **non-parametric statistical comparisons** to detect significant differences.
+- Saves **visualization plots** for easier interpretation of results.
 
-### Installation
-Create and activate a virtual environment.
-
-Install dependencies:
-```
-pip install numpy pandas scikit-image scikit-learn stardist openslide-python joblib matplotlib
-```
-
-### Usage for Stardist 
-1. Segment nuclei using the StarDist model.
-2. Optionally visualize segmented nuclei.
-
-### Breast Cancer Histopathological Image Classification Overview
-The breastcancerclassification.py script performs binary classification of breast cancer histopathological images into benign and malignant categories using convolutional neural networks (CNNs). Before running the script, please ensure that you have the dataset prepared in the following format:
-
-```dataset_dir/
-├── benign/
-│   ├── image1.jpg
-│   ├── image2.jpg
-│   └── ...
-└── malignant/
-    ├── image1.jpg
-    ├── image2.jpg
-    └── ...
-```
-
-
-### Usage for Breast Cancer Histopathological Image Classification
-
-1. **Dataset Preparation**: Obtain a dataset of breast cancer histopathological images. Organize the dataset into subdirectories representing the different classes (benign and malignant).
-
-2. **Running the Script**: Set the `dataset_dir` variable in the script to the path of the dataset directory. Run the script using Python. It will train the CNN model and evaluate its performance using ROC curves and AUC.
-
-3. **Interpreting Results**: After running the script, analyze the generated ROC curve and AUC score. These metrics provide insights into the model's ability to distinguish between benign and malignant tissue samples. A higher AUC score indicates better performance.
-
-
+## **Dependencies**
+Ensure the following Python libraries are installed:
+```bash
+pip install pandas numpy matplotlib seaborn scipy
 
 ## Code to Codons
 
