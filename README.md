@@ -21,8 +21,7 @@ This pipeline automates the **processing, filtering, and statistical analysis** 
 
 ## **Dependencies**
 Ensure the following Python libraries are installed:
-```bash
-pip install pandas numpy matplotlib seaborn scipy
+`pip install pandas numpy matplotlib seaborn scipy'
 
 ## Code to Codons
 
