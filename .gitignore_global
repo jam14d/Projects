@@ -1,0 +1,7 @@
+/IA/
+bioenv/
+*.pyc
+__pycache__/
+site-packages/
+
+
