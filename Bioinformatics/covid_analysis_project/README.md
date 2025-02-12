@@ -19,3 +19,16 @@ conda install -c conda-forge biopython pandas numpy matplotlib
    ```
 5. Restart VS Code if needed.
 
+## File Structure
+
+covid_analysis_project/
+│── data/
+│   ├── reference-NC_045512.fasta (reference sequence)
+│   ├── BA.3.1.fasta (variant sequence)
+│── scripts/
+│   ├── sars_cov2_mutation_finder.py
+│── results/
+│   ├── mutation_report.csv
+│── README.md
+
+
