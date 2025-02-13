@@ -19,16 +19,17 @@ conda install -c conda-forge biopython pandas numpy matplotlib
    ```
 5. Restart VS Code if needed.
 
-## File Structure
 
-covid_analysis_project/
-│── data/
-│   ├── reference-NC_045512.fasta (reference sequence)
-│   ├── BA.3.1.fasta (variant sequence)
-│── scripts/
-│   ├── sars_cov2_mutation_finder.py
-│── results/
-│   ├── mutation_report.csv
-│── README.md
+## Science Stuff
 
+# Mutation Types
+1. Single Nucleotide Polymorphisms (SNPs) (A → G, C → T, etc.)
+2. Insertions (new nucleotides appear in the variant but not in the reference)
+3. Deletions (nucleotides present in the reference are missing in the variant)
+4. Amino Acid Changes (for mutations in coding regions)
+
+
+
+# Reference paper:
+https://pmc.ncbi.nlm.nih.gov/articles/PMC7387429/ 
 
