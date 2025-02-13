@@ -3,7 +3,7 @@ from Bio.Seq import Seq
 
 # Load reference genome
 ref_file = "/Users/jamieannemortel/Projects/Bioinformatics/covid_analysis/data/reference-NC_045512.fasta"
-
+#testing
 # Load variant (an omnicron)
 variant_file = "/Users/jamieannemortel/Projects/Bioinformatics/covid_analysis/data/BA.3.1.fasta"
 
