@@ -9,7 +9,7 @@ conda activate bioinformatics
 conda install -c conda-forge biopython pandas numpy matplotlib
 ```
 
-## Setting Up VS Code
+# *Setting Up VS Code*
 1. Open **VS Code**.
 2. Press **Cmd + Shift + P** (**Ctrl + Shift + P** on Windows/Linux).
 3. Type **"Python: Select Interpreter"** and select it.
@@ -20,7 +20,7 @@ conda install -c conda-forge biopython pandas numpy matplotlib
 5. Restart VS Code if needed.
 
 
-## Science Stuff
+# *Science Stuff*
 
 # Mutation Types
 1. Single Nucleotide Polymorphisms (SNPs) (A → G, C → T, etc.)
