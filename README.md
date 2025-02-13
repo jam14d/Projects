@@ -24,7 +24,7 @@ This project analyzes genetic variations between the Omicron (BA.3.1) variant an
 - Distribution of SNPs across the genome
 - Ratio of transitions to transversions
 
-# **Image Analysis**
+# *Image Analysis*
 
 ## Overview
 This folder contains a pipeline that automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to refine raw data and extract meaningful insights. The goal is to ensure **robust quantification** while reducing noise and variability in biological image datasets.
@@ -43,7 +43,7 @@ This folder contains a pipeline that automates the **processing, filtering, and 
 - Saves **visualization plots** for easier interpretation of results.
 
 
-# **Code to Codons**
+# *Code to Codons*
 
 ## Overview
 A Streamlit web application that simulates the conversion of text to DNA, applies mutations, and translates the DNA through RNA into protein sequences.
@@ -64,10 +64,10 @@ Input text to convert and mutate into DNA, view the RNA transcription, and the r
 ### Modules
 Includes modules for DNA conversion, mutation, RNA transcription, and protein translation.
 
-# **Random**
+# *Random*
 
 The "random" folder within this repository contains a variety of projects at different stages of development. Many of these projects are works in progress, undergoing testing, refinement, or expansion. This folder serves as a creative sandbox, reflecting my ongoing exploration and experimentation with new ideas and technologies. While some projects in this folder may not be fully functional or documented, they offer a glimpse into my interests.
 
-# **Just_For_Fun**
+# *Just_For_Fun*
 
 This directory contains casual and experimental scripts created for entertainment and exploration.
