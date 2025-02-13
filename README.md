@@ -42,10 +42,6 @@ This folder contains a pipeline that automates the **processing, filtering, and 
 - Performs **non-parametric statistical comparisons** to detect significant differences.
 - Saves **visualization plots** for easier interpretation of results.
 
-## Dependencies
-Ensure the following Python libraries are installed:
-`pip install pandas numpy matplotlib seaborn scipy`
-
 
 # **Code to Codons**
 
