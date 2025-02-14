@@ -63,11 +63,3 @@ Input text to convert and mutate into DNA, view the RNA transcription, and the r
 
 ### Modules
 Includes modules for DNA conversion, mutation, RNA transcription, and protein translation.
-
-# *Random*
-
-The "random" folder within this repository contains a variety of projects at different stages of development. Many of these projects are works in progress, undergoing testing, refinement, or expansion. This folder serves as a creative sandbox, reflecting my ongoing exploration and experimentation with new ideas and technologies. While some projects in this folder may not be fully functional or documented, they offer a glimpse into my interests.
-
-# *Just_For_Fun*
-
-This directory contains casual and experimental scripts created for entertainment and exploration.
