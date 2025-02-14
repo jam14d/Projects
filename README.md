@@ -1,9 +1,97 @@
-# Projects Repository
-
-# *COVID-19 Variant Analysis: Omicron (BA.3.1) vs. Reference Genome*
+# 🧠 Brain Tumor Classification using MRI Scans
 
 ## Overview
-This project analyzes genetic variations between the Omicron (BA.3.1) variant and the reference SARS-CoV-2 genome (NC_045512). It specifically identifies single nucleotide polymorphisms (SNPs), classifies them into transitions and transversions, and visualizes their distribution across the genome.
+This project aims to classify brain MRI scans into four categories:
+
+1. **Glioma**
+2. **Meningioma**
+3. **Pituitary Tumor**
+4. **No Tumor (Healthy Brain)**
+
+Using Convolutional Neural Networks (CNNs), we will train a deep learning model to detect and classify brain tumors based on MRI scans. This project is useful for medical image analysis and can serve as a foundation for automated diagnostic systems.
+
+---
+
+## Setup Instructions
+### 1. Clone or Download the Project
+```bash
+git clone https://github.com/your-repo/brain-tumor-classification.git
+cd brain-tumor-classification
+```
+Otherwise, download and extract the project folder.
+
+### 2. Create and Activate a Virtual Environment
+
+Navigate to the project folder:
+```bash
+cd ~/Documents/brain_tumor_project
+```
+Create a virtual environment named `brain_tumor_env`:
+```bash
+python3 -m venv brain_tumor_env
+```
+Activate the environment:
+```bash
+source brain_tumor_env/bin/activate  # Mac/Linux
+```
+For Windows:
+```bash
+brain_tumor_env\Scripts\activate
+```
+
+### 3. Upgrade pip
+```bash
+pip install --upgrade pip
+```
+
+### 4. Install Dependencies
+```bash
+pip install notebook tensorflow numpy matplotlib opencv-python pillow keras scikit-learn
+```
+
+### 5. Download and Organize the Dataset
+
+Download the dataset from Kaggle: [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
+
+Extract the dataset and organize it as follows:
+```bash
+brain_tumor_dataset/
+├── train/
+│   ├── glioma/
+│   ├── meningioma/
+│   ├── pituitary/
+│   ├── no_tumor/
+├── val/  # (Create this manually and move 20% of train images here)
+│   ├── glioma/
+│   ├── meningioma/
+│   ├── pituitary/
+│   ├── no_tumor/
+├── test/
+│   ├── glioma/
+│   ├── meningioma/
+│   ├── pituitary/
+│   ├── no_tumor/
+```
+Use the provided Python script to split the training set into validation:
+```bash
+python split_train_val.py
+```
+
+---
+
+## Project Goals
+- **Preprocess and visualize** MRI scan images.
+- Train a **CNN model** to classify brain tumors.
+- Implement **data augmentation** to improve performance.
+- Evaluate the model using **accuracy, loss, and confusion matrix**.
+- Save the trained model for future predictions.
+
+---
+
+# 🦠 COVID-19 Variant Analysis: Omicron (BA.3.1) vs. Reference Genome
+
+## Overview
+This project analyzes genetic variations between the **Omicron (BA.3.1) variant** and the **reference SARS-CoV-2 genome (NC_045512)**. It identifies **single nucleotide polymorphisms (SNPs)**, classifies them into **transitions and transversions**, and visualizes their distribution.
 
 ## Data
 - **Reference Genome**: `NC_045512.fasta`
@@ -12,7 +100,7 @@ This project analyzes genetic variations between the Omicron (BA.3.1) variant an
 ## Key Functionalities
 1. **Load and Compare Sequences**: Extracts sequences from FASTA files and compares the Omicron variant against the reference genome.
 2. **SNP Detection**: Identifies positions where nucleotide changes occur.
-3. **SNP Classification**: Categorizes SNPs into:
+3. **SNP Classification**:
    - *Transitions*: A <-> G or C <-> T (purine ↔ purine, pyrimidine ↔ pyrimidine changes)
    - *Transversions*: Other nucleotide substitutions (purine ↔ pyrimidine changes)
 4. **Data Visualization**:
@@ -24,42 +112,46 @@ This project analyzes genetic variations between the Omicron (BA.3.1) variant an
 - Distribution of SNPs across the genome
 - Ratio of transitions to transversions
 
-# *Puncta Intensity Analysis*
+---
+
+# Puncta Intensity Analysis
 
 ## Overview
-This folder contains a pipeline that automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to refine raw data and extract meaningful insights. The goal is to ensure **robust quantification** while reducing noise and variability in biological image datasets.
+This pipeline automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to extract meaningful insights.
 
-## Key Applications
+## Key Features
 - **Automated data filtering**: Removes extreme values to improve statistical reliability.
 - **Threshold optimization**: Dynamically identifies intensity cutoffs for feature detection.
 - **Comparative analysis**: Assesses differences between experimental groups using statistical tests.
-- **Data visualization**: Generates **publication-ready** plots for reporting findings.
+- **Data visualization**: Generates **publication-ready** plots.
 
-## Features
-- Loads **raw detection data** from whole-slide image analysis.
-- Identifies and removes **outliers** using an adaptive statistical approach.
-- Computes an **intensity threshold** for feature segmentation.
-- Performs **non-parametric statistical comparisons** to detect significant differences.
-- Saves **visualization plots** for easier interpretation of results.
+---
 
-
-# *Code to Codons*
+# Code to Codons
 
 ## Overview
-A Streamlit web application that simulates the conversion of text to DNA, applies mutations, and translates the DNA through RNA into protein sequences.
+A **Streamlit web application** that simulates the conversion of text to DNA, applies mutations, and translates the DNA through RNA into protein sequences.
 
-### Features
-- Convert text to DNA sequence.
-- Mutate DNA and transcribe into RNA.
-- Translate RNA to protein and highlight stop codons.
+## Features
+- Convert text to **DNA sequence**.
+- Mutate DNA and transcribe into **RNA**.
+- Translate RNA to **protein** and highlight stop codons.
 
-### Installation
-1. Clone the repo and navigate into the specific project directory.
+## Installation
+1. Clone the repo and navigate into the project directory.
 2. Create a virtual environment and install dependencies.
-3. Run the app with `streamlit run app.py`.
+3. Run the app with:
+   ```bash
+   streamlit run app.py
+   ```
 
-### Usage
-Input text to convert and mutate into DNA, view the RNA transcription, and the resulting protein sequence with highlighted stop codons.
+## Usage
+Input text to convert and mutate into **DNA**, view the **RNA transcription**, and analyze the resulting **protein sequence**.
 
-### Modules
-Includes modules for DNA conversion, mutation, RNA transcription, and protein translation.
+## Modules
+Includes modules for:
+- **DNA conversion**
+- **Mutation handling**
+- **RNA transcription**
+- **Protein translation**
+
