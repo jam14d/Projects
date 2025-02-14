@@ -24,7 +24,7 @@ This project analyzes genetic variations between the Omicron (BA.3.1) variant an
 - Distribution of SNPs across the genome
 - Ratio of transitions to transversions
 
-# *Image Analysis*
+# *Puncta Intensity Analysis*
 
 ## Overview
 This folder contains a pipeline that automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to refine raw data and extract meaningful insights. The goal is to ensure **robust quantification** while reducing noise and variability in biological image datasets.
