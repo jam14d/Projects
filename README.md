@@ -28,7 +28,7 @@ cd ~/Documents/brain_tumor_project
 ```
 Create a virtual environment named `brain_tumor_env`:
 ```bash
-python3 -m venv brain_tumor_env
+python3.10 -m venv brain_tumor_env
 ```
 Activate the environment:
 ```bash
@@ -46,7 +46,7 @@ pip install --upgrade pip
 
 ### 4. Install Dependencies
 ```bash
-pip install notebook tensorflow numpy matplotlib opencv-python pillow keras scikit-learn
+pip install tensorflow-macos keras tensorboard tensorflow-estimator tensorflow-metal
 ```
 
 ### 5. Download and Organize the Dataset
