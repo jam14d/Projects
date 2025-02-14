@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from keras.preprocessing.image import ImageDataGenerator  
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from keras.applications.vgg16 import VGG16  
+from tensorflow.keras.preprocessing.image import ImageDataGenerator  
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.applications import VGG16  
 import os
 
 # Set the path to your dataset (UPDATE THIS)
@@ -17,6 +17,8 @@ test_dir = os.path.join(dataset_dir, "test")
 print("Training Directory Exists:", os.path.exists(train_dir))
 print("Validation Directory Exists:", os.path.exists(val_dir))
 print("Test Directory Exists:", os.path.exists(test_dir))
+
+
 
 # Load pre-trained VGG16 without the top classifier layers
 base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
