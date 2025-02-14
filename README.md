@@ -80,11 +80,17 @@ python split_train_val.py
 ---
 
 ## Project Goals
-- **Preprocess and visualize** MRI scan images.
-- Train a **CNN model** to classify brain tumors.
-- Implement **data augmentation** to improve performance.
-- Evaluate the model using **accuracy, loss, and confusion matrix**.
+- Preprocess and visualize MRI scan images.
+- Train a CNN model to classify brain tumors.
+- Implement data augmentation to improve performance.
+- Evaluate the model using accuracy, loss, and confusion matrix.
 - Save the trained model for future predictions.
+
+# Using pre-trained model VGG16
+- Pre-trained CNN developed by Oxford’s Visual Geometry Group.
+- Trained on ImageNet for object recognition.
+- Deep architecture with 16 layers (13 convolutional + 3 dense).
+- For feature extraction and transfer learning.
 
 ---
 

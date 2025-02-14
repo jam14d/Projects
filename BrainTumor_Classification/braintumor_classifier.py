@@ -17,3 +17,27 @@ test_dir = os.path.join(dataset_dir, "test")
 print("Training Directory Exists:", os.path.exists(train_dir))
 print("Validation Directory Exists:", os.path.exists(val_dir))
 print("Test Directory Exists:", os.path.exists(test_dir))
+
+# Load pre-trained VGG16 without the top classifier layers
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+# Freeze the base model's layers
+for layer in base_model.layers:
+    layer.trainable = False
+
+# Build the full model
+model = Sequential([
+    base_model,  # Pre-trained feature extractor
+    Flatten(),
+    Dense(256, activation='relu'),
+    Dropout(0.5),
+    Dense(1, activation='sigmoid')  # Binary classification (tumor vs. no tumor)
+])
+
+# Compile the model
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+# Model summary
+model.summary()
