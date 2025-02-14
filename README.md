@@ -8,8 +8,6 @@ This project aims to classify brain MRI scans into four categories:
 3. **Pituitary Tumor**
 4. **No Tumor (Healthy Brain)**
 
-Using Convolutional Neural Networks (CNNs), we will train a deep learning model to detect and classify brain tumors based on MRI scans. This project is useful for medical image analysis and can serve as a foundation for automated diagnostic systems.
-
 ---
 
 ## Setup Instructions
