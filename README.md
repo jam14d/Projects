@@ -84,7 +84,7 @@ python split_train_val.py
 - Evaluate the model using accuracy, loss, and confusion matrix.
 - Save the trained model for future predictions.
 
-# Using pre-trained model VGG16
+## Using pre-trained model VGG16
 - Pre-trained CNN developed by Oxford’s Visual Geometry Group.
 - Trained on ImageNet for object recognition.
 - Deep architecture with 16 layers (13 convolutional + 3 dense).
