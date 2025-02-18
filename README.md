@@ -44,7 +44,7 @@ pip install --upgrade pip
 
 ### 4. Install Dependencies
 ```bash
-pip install matplotlib tensorflow-macos keras tensorboard tensorflow-estimator tensorflow-metal
+pip install scikit-learn seaborn matplotlib tensorflow-macos keras tensorboard tensorflow-estimator tensorflow-metal
 ```
 
 ### 5. Download and Organize the Dataset
