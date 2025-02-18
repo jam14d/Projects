@@ -83,3 +83,5 @@ train_dir, val_dir = check_directories()
 model = build_model()
 train_generator, val_generator = get_data_generators(train_dir, val_dir)
 history = train_and_save_model(model, train_generator, val_generator)
+
+#test
