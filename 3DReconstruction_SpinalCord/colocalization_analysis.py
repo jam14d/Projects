@@ -33,6 +33,7 @@ def find_colocalized_cells(points, threshold=1):
     matches = []
 
     for i in range(len(points)):
+        #print(i)
         for j in range(i + 1, len(points)):
             a, b = points[i], points[j]
 
