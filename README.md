@@ -130,3 +130,34 @@ This pipeline automates the **processing, filtering, and statistical analysis** 
 - **Data visualization**: Generates **publication-ready** plots.
 
 ---
+# Budget Buddy Documentation
+
+## Overview
+Budget Buddy is an interactive budgeting tool created with Streamlit and Plotly. It helps users track monthly income, expenses, and visualize their budget allocations.
+
+## Features
+- **Interactive Sidebar**: Users can input monthly income, edit pre-filled common expenses, and add new custom expense categories.
+- **Real-Time Budget Calculations**: Automatically calculates total expenses and remaining balance.
+- **Expense Breakdown**: Detailed view of each expense category.
+- **Visualization**: Pie chart illustrating the distribution of expenses.
+- **Responsive Design**: Customized CSS for enhanced aesthetics and usability.
+
+## How to Use
+1. **Set Monthly Income**: Enter your monthly income in the sidebar.
+2. **Adjust Expenses**: Modify default values for typical expenses such as Rent, Utilities, Groceries, etc.
+3. **Add Custom Categories**: Enter a new category and specify the amount, then click "Add Category."
+4. **Review Budget Summary**: Monitor your total expenses and remaining balance in real-time.
+5. **Visualize Expenses**: View an interactive pie chart displaying expense distribution.
+
+## Requirements
+- Python
+- Streamlit (`pip install streamlit`)
+- Plotly (`pip install plotly`)
+
+## Running the App
+Execute the app using:
+```bash
+streamlit run app.py
+```
+
+#test
