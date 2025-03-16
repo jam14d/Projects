@@ -130,7 +130,7 @@ This pipeline automates the **processing, filtering, and statistical analysis** 
 - **Data visualization**: Generates **publication-ready** plots.
 
 ---
-# Budget Buddy Documentation
+# Budget Buddy App
 
 ## Overview
 Budget Buddy is an interactive budgeting tool created with Streamlit and Plotly. It helps users track monthly income, expenses, and visualize their budget allocations.
@@ -159,5 +159,3 @@ Execute the app using:
 ```bash
 streamlit run app.py
 ```
-
-#test
