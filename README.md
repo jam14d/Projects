@@ -17,11 +17,11 @@ Budget Buddy is an interactive budgeting tool created with Streamlit and Plotly.
 - **Responsive Design**: Enhanced aesthetics via customized CSS.
 
 #### How to Use
-1. **Set Monthly Income**.
-2. **Adjust Expenses**.
-3. **Add Custom Categories**.
-4. **Review Budget Summary**.
-5. **Visualize Expenses**.
+1. **Set Monthly Income**
+2. **Adjust Expenses**
+3. **Add Custom Categories**
+4. **Review Budget Summary**
+5. **Visualize Expenses**
 
 #### Requirements
 - Python
