@@ -1,161 +1,117 @@
-# 🧠 Brain Tumor Classification using MRI Scans
+# Coding Projects
 
-## Overview
-This project aims to classify brain MRI scans into four categories:
+## General Applications
 
-1. **Glioma**
-2. **Meningioma**
-3. **Pituitary Tumor**
-4. **No Tumor (Healthy Brain)**
+### Budget Buddy App
 
----
-
-## Setup Instructions
-### 1. Clone or Download the Project
-```bash
-git clone https://github.com/your-repo/brain-tumor-classification.git
-cd brain-tumor-classification
-```
-Otherwise, download and extract the project folder.
-
-### 2. Create and Activate a Virtual Environment
-
-Navigate to the project folder:
-```bash
-cd ~/Documents/brain_tumor_project
-```
-Create a virtual environment named `brain_tumor_env`:
-```bash
-python3.10 -m venv brain_tumor_env
-```
-Activate the environment:
-```bash
-source brain_tumor_env/bin/activate  # Mac/Linux
-```
-For Windows:
-```bash
-brain_tumor_env\Scripts\activate
-```
-
-### 3. Upgrade pip
-```bash
-pip install --upgrade pip
-```
-
-### 4. Install Dependencies
-```bash
-pip install scikit-learn seaborn matplotlib tensorflow-macos keras tensorboard tensorflow-estimator tensorflow-metal
-```
-
-### 5. Download and Organize the Dataset
-
-Download the dataset from Kaggle: [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
-
-Extract the dataset and organize it as follows:
-```bash
-brain_tumor_dataset/
-├── train/
-│   ├── glioma/
-│   ├── meningioma/
-│   ├── pituitary/
-│   ├── no_tumor/
-├── val/  # (Create this manually and move 20% of train images here)
-│   ├── glioma/
-│   ├── meningioma/
-│   ├── pituitary/
-│   ├── no_tumor/
-├── test/
-│   ├── glioma/
-│   ├── meningioma/
-│   ├── pituitary/
-│   ├── no_tumor/
-```
-Use the provided Python script to split the training set into validation:
-```bash
-python split_train_val.py
-```
-
----
-
-## Project Goals
-- Preprocess and visualize MRI scan images.
-- Train a CNN model to classify brain tumors.
-- Implement data augmentation to improve performance.
-- Evaluate the model using accuracy, loss, and confusion matrix.
-- Save the trained model for future predictions.
-
-## Using pre-trained model VGG16
-- Pre-trained CNN developed by Oxford’s Visual Geometry Group.
-- Trained on ImageNet for object recognition.
-- Deep architecture with 16 layers (13 convolutional + 3 dense).
-- For feature extraction and transfer learning.
-
----
-
-# 🦠 COVID-19 Variant Analysis: Omicron (BA.3.1) vs. Reference Genome
-
-## Overview
-This project analyzes genetic variations between the **Omicron (BA.3.1) variant** and the **reference SARS-CoV-2 genome (NC_045512)**. It identifies **single nucleotide polymorphisms (SNPs)**, classifies them into **transitions and transversions**, and visualizes their distribution.
-
-## Data
-- **Reference Genome**: `NC_045512.fasta`
-- **Omicron Variant Genome**: `BA.3.1.fasta`
-
-## Key Functionalities
-1. **Load and Compare Sequences**: Extracts sequences from FASTA files and compares the Omicron variant against the reference genome.
-2. **SNP Detection**: Identifies positions where nucleotide changes occur.
-3. **SNP Classification**:
-   - *Transitions*: A <-> G or C <-> T (purine ↔ purine, pyrimidine ↔ pyrimidine changes)
-   - *Transversions*: Other nucleotide substitutions (purine ↔ pyrimidine changes)
-4. **Data Visualization**:
-   - Histogram showing SNP distribution across the genome.
-   - Pie chart comparing the proportion of transitions vs. transversions.
-
-## Results
-- Total number of SNPs detected
-- Distribution of SNPs across the genome
-- Ratio of transitions to transversions
-
----
-
-# Puncta Intensity Analysis
-
-## Overview
-This pipeline automates the **processing, filtering, and statistical analysis** of whole-slide image data, focusing on **intensity and puncta detection**. It applies **outlier removal** and **adaptive thresholding** to extract meaningful insights.
-
-## Key Features
-- **Automated data filtering**: Removes extreme values to improve statistical reliability.
-- **Threshold optimization**: Dynamically identifies intensity cutoffs for feature detection.
-- **Comparative analysis**: Assesses differences between experimental groups using statistical tests.
-- **Data visualization**: Generates **publication-ready** plots.
-
----
-# Budget Buddy App
-
-## Overview
+#### Overview
 Budget Buddy is an interactive budgeting tool created with Streamlit and Plotly. It helps users track monthly income, expenses, and visualize their budget allocations.
 
-## Features
-- **Interactive Sidebar**: Users can input monthly income, edit pre-filled common expenses, and add new custom expense categories.
-- **Real-Time Budget Calculations**: Automatically calculates total expenses and remaining balance.
-- **Expense Breakdown**: Detailed view of each expense category.
-- **Visualization**: Pie chart illustrating the distribution of expenses.
-- **Responsive Design**: Customized CSS for enhanced aesthetics and usability.
+[Live App](https://jam14d-projects-budgetbuddyapp-tnngqb.streamlit.app/)
 
-## How to Use
-1. **Set Monthly Income**: Enter your monthly income in the sidebar.
-2. **Adjust Expenses**: Modify default values for typical expenses such as Rent, Utilities, Groceries, etc.
-3. **Add Custom Categories**: Enter a new category and specify the amount, then click "Add Category."
-4. **Review Budget Summary**: Monitor your total expenses and remaining balance in real-time.
-5. **Visualize Expenses**: View an interactive pie chart displaying expense distribution.
+#### Features
+- **Interactive Sidebar**: Input monthly income, edit pre-filled common expenses, and add custom categories.
+- **Real-Time Budget Calculations**: Instantly updates total expenses and remaining balance.
+- **Expense Breakdown**: Detailed views per category.
+- **Visualization**: Interactive pie chart showing expense distribution.
+- **Responsive Design**: Enhanced aesthetics via customized CSS.
 
-## Requirements
+#### How to Use
+1. **Set Monthly Income**.
+2. **Adjust Expenses**.
+3. **Add Custom Categories**.
+4. **Review Budget Summary**.
+5. **Visualize Expenses**.
+
+#### Requirements
 - Python
 - Streamlit (`pip install streamlit`)
 - Plotly (`pip install plotly`)
 
-## Running the App
-Execute the app using:
+#### Running the App
 ```bash
 streamlit run app.py
 ```
+
+---
+
+## Scientific Computing
+
+### Brain Tumor Classification using MRI Scans
+
+#### Overview
+Classify MRI scans into:
+- **Glioma**
+- **Meningioma**
+- **Pituitary Tumor**
+- **No Tumor (Healthy Brain)**
+
+#### Setup Instructions
+- Clone repository or download project files.
+- Create and activate a Python virtual environment:
+```bash
+python3.10 -m venv brain_tumor_env
+source brain_tumor_env/bin/activate
+```
+- Upgrade pip:
+```bash
+pip install --upgrade pip
+```
+- Install dependencies:
+```bash
+pip install scikit-learn seaborn matplotlib tensorflow-macos keras tensorboard tensorflow-estimator tensorflow-metal
+```
+- Organize dataset from [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset).
+- Split dataset using provided Python script:
+```bash
+python split_train_val.py
+```
+
+#### Project Goals
+- Image preprocessing and visualization
+- CNN training
+- Data augmentation
+- Model evaluation (accuracy, loss, confusion matrix)
+- Save trained models
+
+#### Using VGG16 Model
+- Pre-trained on ImageNet.
+- Feature extraction and transfer learning.
+
+---
+
+### COVID-19 Variant Analysis: Omicron (BA.3.1) vs. Reference Genome
+
+#### Overview
+Analyze genetic variations between Omicron (BA.3.1) and reference SARS-CoV-2 genome.
+
+#### Data
+- Reference Genome: `NC_045512.fasta`
+- Omicron Variant Genome: `BA.3.1.fasta`
+
+#### Key Functionalities
+- Sequence loading and comparison
+- SNP detection and classification
+  - Transitions (A <-> G, C <-> T)
+  - Transversions (other substitutions)
+- Data Visualization (histogram, pie chart)
+
+#### Results
+- SNP totals and distribution
+- Transitions/transversions ratio
+
+---
+
+### Puncta Intensity Analysis
+
+#### Overview
+Automated analysis pipeline for whole-slide image data focusing on intensity and puncta detection.
+
+#### Key Features
+- Automated data filtering (outlier removal)
+- Adaptive thresholding
+- Statistical comparative analysis
+- Visualization (publication-ready plots)
+
+---
+
