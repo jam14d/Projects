@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
 
 def main():
     st.set_page_config(page_title="Budget Buddy", layout="wide")
@@ -34,7 +35,7 @@ def main():
         "Internet": 25,
         "Groceries": 175,
         "Gasoline": 60,  
-        "Dining Out & Entertainment": 100,
+        "Fun": 100,
         "Gym": 50,
         "Savings": 50,
         "Miscellaneous": 100,
@@ -89,16 +90,63 @@ def main():
                 color_discrete_sequence=["#A88C7D", "#B2A68D", "#7297A0", "#54738E", "#82AC7C", "#9DBA94"]
             )
             
-            # Make pie chart much bigger and adjust legend
-            fig.update_layout(
-                height=700,  # Bigger height
-                width=700,   # Bigger width
-                title_font_size=24,
-                legend_font_size=16,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),  # Move legend to bottom
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)  # Keeps it inside col2
+
+        # Earth-tone colors
+        colors = [
+            "#C19A6B",  # Camel
+            "#B2A68D",  # Sand
+            "#708090",  # Slate
+            "#9DBA94",  # Sage
+            "#A88C7D",  # Clay
+            "#54738E",  # Dusty Blue
+            "#7297A0",  # Stormy Sea
+            "#D2B48C",  # Tan
+            "#9E7B6E",  # Walnut
+            "#BDB76B",  # Dark Khaki
+            "#D3C0A3",  # Beige
+            "#8F9779"   # Moss
+        ]
+
+        fig = go.Figure(
+            data=[
+                go.Pie(
+                    labels=list(expense_estimates.keys()), 
+                    values=list(expense_estimates.values()), 
+                    hole=0.1,
+                    textinfo='percent+label',
+                    textfont=dict(size=14, color='white'),
+                    marker=dict(colors=colors, line=dict(color='#2C2F33', width=1))
+                )
+            ]
+        )
+
+        fig.update_layout(
+            title={
+                'text': "Expense Distribution",
+                'font': dict(color='white', size=20, family='Arial, sans-serif'),
+                'x': 0.5
+            },
+            legend=dict(
+                orientation="h",
+                font=dict(color='white', size=15),
+                x=0.5,
+                xanchor='center',
+                y=-1.0,
+                bgcolor='rgba(0,0,0,0)'
+            ),
+            paper_bgcolor='rgba(0,0,0,0)',  # transparent background
+            plot_bgcolor='rgba(0,0,0,0)',    # transparent background
+            margin=dict(l=0, r=0, t=50, b=0)
+        )
+
+        fig.update_traces(
+            textinfo='percent+label',
+            textfont_size=14,
+            marker=dict(line=dict(color='#000000', width=1))
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
 
 
 if __name__ == "__main__":
