@@ -171,7 +171,7 @@ def main():
 
         fig_bar.update_layout(
             title={
-                'text': "How Many Dollars Went Where?",
+                'text': "How Many Dollars Go Where?",
                 'font': dict(color='white', size=20, family='Arial, sans-serif'),  # Match pie chart title styling
                 'x': 0.5  # Center the title
             },
