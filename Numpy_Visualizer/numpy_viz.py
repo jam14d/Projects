@@ -21,31 +21,31 @@ bins = st.slider("Number of Bins", min_value=5, max_value=50, value=20)
 explanations = {
     "rand (Uniform)": "The `np.random.rand()` function generates random numbers from a **uniform distribution** "
                       "in the range **[0,1]**. Each number has an equal probability of appearing. "
-                      "\n\n📌 **Use case**: Useful for simulations, Monte Carlo methods, and initializing random weights in machine learning.",
+                      "\n\n**Use case**: Useful for simulations, Monte Carlo methods, and initializing random weights in machine learning.",
     
     "randn (Normal)": "The `np.random.randn()` function generates random numbers from a **standard normal distribution** "
                       "with **mean = 0** and **standard deviation = 1**. It follows the bell-shaped Gaussian curve. "
-                      "\n\n📌 **Use case**: Commonly used in statistics, signal processing, and data science applications.",
+                      "\n\n**Use case**: Commonly used in statistics, signal processing, and data science applications.",
     
     "randint (Random Integers)": "The `np.random.randint()` function generates **random integers** from a specified range. "
                                  "For example, `np.random.randint(0, 100, size)` produces numbers between 0 and 99. "
-                                 "\n\n📌 **Use case**: Useful for random sampling, simulations, and selecting indices randomly.",
+                                 "\n\n**Use case**: Useful for random sampling, simulations, and selecting indices randomly.",
     
     "choice (Random Selection)": "The `np.random.choice()` function selects random elements from a given array or list. "
                                  "For example, `np.random.choice([10, 20, 30, 40], size)` picks values randomly from `[10, 20, 30, 40]`."
-                                 "\n\n📌 **Use case**: Useful for creating random samples from a predefined dataset.",
+                                 "\n\n **Use case**: Useful for creating random samples from a predefined dataset.",
     
     "beta (Beta Distribution)": "The `np.random.beta(a, b, size)` function generates numbers from a **beta distribution**, "
                                 "which is often used in Bayesian statistics and probability modeling. "
-                                "\n\n📌 **Use case**: Used in Bayesian inference, A/B testing, and modeling probabilities between 0 and 1.",
+                                "\n\n**Use case**: Used in Bayesian inference, A/B testing, and modeling probabilities between 0 and 1.",
     
     "exponential (Exponential Distribution)": "The `np.random.exponential(scale, size)` function generates numbers from an "
                                               "**exponential distribution**, which models the time between independent events occurring "
-                                              "at a constant rate. \n\n📌 **Use case**: Used in queueing theory, finance, and reliability analysis.",
+                                              "at a constant rate. \n\n**Use case**: Used in queueing theory, finance, and reliability analysis.",
     
     "poisson (Poisson Distribution)": "The `np.random.poisson(lam, size)` function generates numbers from a **Poisson distribution**, "
                                       "which represents the probability of a given number of events occurring in a fixed time or space. "
-                                      "\n\n📌 **Use case**: Used in event modeling, epidemiology, and traffic flow analysis."
+                                      "\n\n**Use case**: Used in event modeling, epidemiology, and traffic flow analysis."
 }
 
 # Generate data based on selection
@@ -76,7 +76,7 @@ elif distribution == "poisson (Poisson Distribution)":
     title = "Poisson Distribution (poisson)"
 
 # Display explanation
-st.markdown(f"### 📖 Explanation: {distribution}")
+st.markdown(f"###Explanation: {distribution}")
 st.write(explanations[distribution])
 
 # Plot the histogram
@@ -89,7 +89,7 @@ ax.set_ylabel("Density")
 st.pyplot(fig)
 
 # Sources
-st.markdown("### 📚 References:")
+st.markdown("###References:")
 st.markdown(
     """
     - [NumPy Random Documentation](https://numpy.org/doc/stable/reference/random/index.html)
