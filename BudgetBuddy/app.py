@@ -1,6 +1,7 @@
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import pandas as pd
 
 def main():
     st.set_page_config(page_title="Budget Buddy", layout="wide")
@@ -81,12 +82,12 @@ def main():
             st.markdown(f"<div class='expense-box'><b>{category}:</b> ${amount:.2f}</div>", unsafe_allow_html=True)
 
     with col2:
-        st.markdown("### Expense Breakdown")
+        #st.markdown("### The Big Picture & The Fine Print: Budget Insights")
         if expense_estimates:
             fig = px.pie(
                 names=expense_estimates.keys(), 
                 values=expense_estimates.values(), 
-                title="Expense Distribution", 
+                #title="Expense Distribution", 
                 color_discrete_sequence=["#A88C7D", "#B2A68D", "#7297A0", "#54738E", "#82AC7C", "#9DBA94"]
             )
             
@@ -121,8 +122,10 @@ def main():
         )
 
         fig.update_layout(
+            width=1000,  # Increase figure width
+            height=500,  # Increase figure height
             title={
-                'text': "Expense Distribution",
+                'text': "Who's Taking the Biggest Slice of Spending Pie?",
                 'font': dict(color='white', size=20, family='Arial, sans-serif'),
                 'x': 0.5
             },
@@ -146,6 +149,41 @@ def main():
         )
 
         st.plotly_chart(fig, use_container_width=True)
+
+        # Convert expenses into a percentage of income
+        expense_data = {
+            "Category": list(expense_estimates.keys()),
+            "Amount": list(expense_estimates.values()),
+            #"Percentage of Income": [(amount / income) * 100 if income > 0 else 0 for amount in expense_estimates.values()]
+        }
+
+        df_expenses = pd.DataFrame(expense_data)
+
+       
+        # Bar Chart: Total Spending Per Category
+        fig_bar = px.bar(df_expenses, 
+                        x="Category", 
+                        y="Amount", 
+                        text_auto=".2s",
+                        labels={"Amount": "Total Spent ($)"},
+                        color="Category",
+                        color_discrete_sequence=px.colors.qualitative.Set3)
+
+        fig_bar.update_layout(
+            title={
+                'text': "How Many Dollars Went Where?",
+                'font': dict(color='white', size=20, family='Arial, sans-serif'),  # Match pie chart title styling
+                'x': 0.5  # Center the title
+            },
+            yaxis=dict(title="Total Spent ($)"),
+            xaxis=dict(title="Spending Categories"),
+            margin=dict(l=40, r=40, t=50, b=40),
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)"
+        )
+
+
+        st.plotly_chart(fig_bar, use_container_width=True)
 
 
 
