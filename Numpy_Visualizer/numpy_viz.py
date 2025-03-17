@@ -76,7 +76,7 @@ elif distribution == "poisson (Poisson Distribution)":
     title = "Poisson Distribution (poisson)"
 
 # Display explanation
-st.markdown(f"###Explanation: {distribution}")
+st.markdown(f"### Explanation: {distribution}")
 st.write(explanations[distribution])
 
 # Plot the histogram
@@ -89,7 +89,7 @@ ax.set_ylabel("Density")
 st.pyplot(fig)
 
 # Sources
-st.markdown("###References:")
+st.markdown("### References:")
 st.markdown(
     """
     - [NumPy Random Documentation](https://numpy.org/doc/stable/reference/random/index.html)
