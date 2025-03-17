@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # App title
-st.title("NumPy Random Number Generator Visualizer")
+st.title("NumPy Viz")
 
 # Dropdown menu for selecting distribution
 distribution = st.selectbox(
