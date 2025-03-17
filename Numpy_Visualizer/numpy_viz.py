@@ -81,7 +81,7 @@ st.write(explanations[distribution])
 
 # Plot the histogram
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.hist(data, bins=bins, density=True, alpha=0.7, color='blue', edgecolor='black')
+ax.hist(data, bins=bins, density=True, alpha=0.7, color='sandybrown', edgecolor='black')
 ax.set_title(title)
 ax.set_xlabel("Value")
 ax.set_ylabel("Density")
