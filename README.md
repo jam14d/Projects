@@ -2,6 +2,40 @@
 
 ## General Applications
 
+### NumPy Viz  
+
+#### Overview  
+NumPy Viz is an interactive learning tool built with Streamlit that helps users understand and visualize **NumPy random number generators**. It provides explanations, adjustable parameters, and real-time visualizations of probability distributions.  
+
+[Live App](https://jam14d-projects-numpy-visualizernumpy-viz-f7slut.streamlit.app/)  
+
+#### Features  
+- **Interactive Dropdown Menu**: Select from various NumPy random functions (`rand`, `randn`, `randint`, etc.).  
+- **Dynamic Explanations**: Learn how each function works and when to use it.  
+- **Histogram Visualization**: Visualize the distribution of generated values.  
+- **Adjustable Parameters**: Modify sample size and bin count for better analysis.  
+- **Citations & Documentation Links**: Access official NumPy and SciPy resources.  
+
+#### How to Use  
+1. **Select a Random Function** from the dropdown menu.  
+2. **Adjust Sample Size and Bins** using sliders.  
+3. **Read the Explanation** to understand the distribution.  
+4. **View the Histogram** to analyze the data.  
+
+#### Requirements  
+- Python  
+- Streamlit (`pip install streamlit`)  
+- NumPy (`pip install numpy`)  
+- Matplotlib (`pip install matplotlib`)  
+
+#### Running the App
+```bash
+streamlit run app.py
+
+#### References
+- NumPy Random Documentation: https://numpy.org/doc/stable/reference/random/index.html
+- SciPy Statistical Distributions: https://docs.scipy.org/doc/scipy/tutorial/stats.html
+
 ### Budget Buddy App
 
 #### Overview
