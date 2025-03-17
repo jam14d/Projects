@@ -37,6 +37,8 @@ streamlit run app.py
 - NumPy Random Documentation: https://numpy.org/doc/stable/reference/random/index.html
 - SciPy Statistical Distributions: https://docs.scipy.org/doc/scipy/tutorial/stats.html
 
+---
+
 ### Budget Buddy App
 
 #### Overview
