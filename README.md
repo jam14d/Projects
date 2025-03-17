@@ -31,6 +31,7 @@ NumPy Viz is an interactive learning tool built with Streamlit that helps users 
 #### Running the App
 ```bash
 streamlit run app.py
+```
 
 #### References
 - NumPy Random Documentation: https://numpy.org/doc/stable/reference/random/index.html
