@@ -2,33 +2,41 @@
 
 ## General Applications
 
-### NumPy Viz  
+## NumPy Viz  
 
-#### Overview  
-NumPy Viz is an interactive learning tool built with Streamlit that helps users understand and visualize **NumPy random number generators**. It provides explanations, adjustable parameters, and real-time visualizations of probability distributions.  
+### Overview  
+NumPy Viz is an interactive learning tool built with Streamlit that helps users explore **random number generation** and **array transformations** using NumPy. It provides real-time visualizations, explanations, and adjustable parameters to enhance understanding.  
 
 [Live App](https://jam14d-projects-numpy-visualizernumpy-viz-f7slut.streamlit.app/)  
 
-#### Features  
-- **Interactive Dropdown Menu**: Select from various NumPy random functions (`rand`, `randn`, `randint`, etc.).  
-- **Dynamic Explanations**: Learn how each function works and when to use it.  
-- **Histogram Visualization**: Visualize the distribution of generated values.  
-- **Adjustable Parameters**: Modify sample size and bin count for better analysis.  
-- **Citations & Documentation Links**: Access official NumPy and SciPy resources.  
+### Sections  
 
-#### How to Use  
-1. **Select a Random Function** from the dropdown menu.  
-2. **Adjust Sample Size and Bins** using sliders.  
-3. **Read the Explanation** to understand the distribution.  
-4. **View the Histogram** to analyze the data.  
+#### 1. Exploring Probability: Random Data Generator  
+This section allows users to generate and visualize different probability distributions using NumPy’s random module.  
+- Select from distributions like Uniform, Normal, Poisson, and more.  
+- Adjust sample size and bin count for better visualization.  
+- Read explanations on how each distribution works and when to use it.  
+- View histograms to analyze the generated data.  
 
-#### Requirements  
+#### 2. Shape & Shift: NumPy Array Playground  
+This section provides an interactive way to create, reshape, and transform NumPy arrays.  
+- Generate sequences of numbers based on user-defined sizes.  
+- Reshape arrays into different dimensions and see how data is reorganized.  
+- Apply transformations like multiplication, addition, and squaring.  
+- Compare original and transformed arrays in visual plots.  
+
+### How to Use  
+1. Select a section from the sidebar.  
+2. Adjust settings such as sample size, bins, or array dimensions.  
+3. View explanations and real-time visualizations.  
+
+### Requirements  
 - Python  
 - Streamlit (`pip install streamlit`)  
 - NumPy (`pip install numpy`)  
 - Matplotlib (`pip install matplotlib`)  
 
-#### Running the App
+### Running the App  
 ```bash
 streamlit run app.py
 ```
