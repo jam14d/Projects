@@ -48,16 +48,14 @@ class NumPyVizApp:
         
         if st.button("Find argmax()"):
             st.write("### Understanding argmax()")
-            st.write("argmax() returns the index of the maximum value in an array."
-                     softbreak 
-                     "This is useful for finding where the highest value occurs.")
+            st.write("argmax() returns the index of the maximum value in an array.")
             max_value = random_array.max()
             max_index = random_array.argmax()
             st.write(f"Max Value: {max_value} at Index {max_index}")
         
         if st.button("Find argmin()"):
             st.write("### Understanding argmin()")
-            st.write("argmin() returns the index of the minimum value in an array. This helps locate the lowest value in the dataset.")
+            st.write("argmin() returns the index of the minimum value in an array.")
             min_value = random_array.min()
             min_index = random_array.argmin()
             st.write(f"Min Value: {min_value} at Index {min_index}")
