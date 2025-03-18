@@ -46,67 +46,42 @@ class NumPyVizApp:
         random_array = data[:10]  # Take the first 10 elements for clarity
         st.write("Generated Random Array:", random_array)
         
-        if st.button("Find argmax()"):
-            st.write("### Understanding argmax()")
-            st.write("argmax() returns the index of the maximum value in an array.")
+        if st.button("Find Arg Max"):
+            st.write("### Understanding Argmax")
+            st.write("Argmax returns the index of the maximum value in an array. This is useful for finding where the highest value occurs.")
             max_value = random_array.max()
             max_index = random_array.argmax()
             st.write(f"Max Value: {max_value} at Index {max_index}")
         
-        if st.button("Find argmin()"):
-            st.write("### Understanding argmin()")
-            st.write("argmin() returns the index of the minimum value in an array.")
+        if st.button("Find Arg Min"):
+            st.write("### Understanding Argmin")
+            st.write("Argmin returns the index of the minimum value in an array. This helps locate the lowest value in the dataset.")
             min_value = random_array.min()
             min_index = random_array.argmin()
             st.write(f"Min Value: {min_value} at Index {min_index}")
 
-    def generate_random_data(self, distribution, sample_size):
-        """generate random data based on what was selected"""
-        if distribution == "rand (Uniform)":
-            return np.random.rand(sample_size), "Uniform Distribution (rand)"
-        elif distribution == "randn (Normal)":
-            return np.random.randn(sample_size), "Normal Distribution (randn)"
-        elif distribution == "randint (Random Integers)":
-            return np.random.randint(0, 100, sample_size), "Random Integers (randint)"
-        elif distribution == "choice (Random Selection)":
-            choices = np.array([10, 20, 30, 40, 50])
-            return np.random.choice(choices, sample_size), "Random Selection (choice)"
-        elif distribution == "beta (Beta Distribution)":
-            return np.random.beta(2, 5, sample_size), "Beta Distribution (beta)"
-        elif distribution == "exponential (Exponential Distribution)":
-            return np.random.exponential(1.0, sample_size), "Exponential Distribution (exponential)"
-        elif distribution == "poisson (Poisson Distribution)":
-            return np.random.poisson(5, sample_size), "Poisson Distribution (poisson)"
-        return None, ""
-    
-
-
-def display_array_transformations(self):
-        """handle numpy array transformations and viz."""
+    def display_array_transformations(self):
+        """Handle numpy array transformations and visualization."""
         st.title("Shape & Shift: NumPy Array Playground")
         st.write("Experiment with NumPy arrays! Generate sequences, reshape them into grids, and "
              "apply mathematical transformations. See how numbers shift and change in real-time.")
 
-        # Step 1: Generate a NumPy array
         array_size = st.slider("Select array size (0 to N):", min_value=5, max_value=100, value=25, step=5)
         arr = np.arange(array_size)
 
         st.write("Generated 1D array:")
         st.code(arr)
 
-        # Step 2: Reshaping the array
         rows = st.slider("Rows:", min_value=1, max_value=array_size, value=5)
         cols = st.slider("Columns:", min_value=1, max_value=array_size, value=5)
 
         reshaped_array = self.reshape_array(arr, rows, cols, array_size)
 
-        # Step 3: Apply mathematical operations
         operation = st.selectbox("Choose an operation:", ["None", "Multiply by 2", "Add 5", "Square Elements"])
         transformed_array = self.apply_operation(arr, operation)
 
         st.code(transformed_array)
 
-        # Step 4: Visualization
         self.plot_array_transformation(arr, transformed_array)
 
     def reshape_array(self, arr, rows, cols, array_size):
@@ -118,47 +93,41 @@ def display_array_transformations(self):
             return reshaped_array
         else:
             st.warning("Rows × Columns must equal the total number of elements in the array.")
-            return arr  # Return original array if reshape isn't possible
+            return arr
 
     def apply_operation(self, arr, operation):
-        """apply selected math operations"""
+        """Apply selected math operations."""
         if operation == "Multiply by 2":
             return arr * 2
         elif operation == "Add 5":
             return arr + 5
         elif operation == "Square Elements":
             return arr ** 2
-        return arr  # Return unchanged array if no operation is selected
+        return arr
 
     def plot_array_transformation(self, original, transformed):
-    
+        """Plot the transformation of an array."""
         fig, ax = plt.subplots(figsize=(6, 4))
 
-        # Define exact colors
         original_color = 'tan'
         transformed_color = 'saddlebrown'
 
-        # Plot the original array
         line1, = ax.plot(original, marker='o', linestyle='--', color=original_color, markersize=6, label="Original Array")
 
-        # Only plot transformed array if it's different
         if not np.array_equal(original, transformed):
             line2, = ax.plot(transformed, marker='s', linestyle='-', color=transformed_color, markersize=6, label="Transformed Array")
         else:
-            line2 = None  # No transformed array to show
+            line2 = None
 
         ax.set_title("Array Transformation", fontsize=12, color='sienna')
         ax.set_xlabel("Index", fontsize=10, color='peru')
         ax.set_ylabel("Value", fontsize=10, color='peru')
-
         ax.grid(True, linestyle=":", linewidth=0.6, color="tan")
 
-        # Explicitly set the legend colors
         handles = [line1] if line2 is None else [line1, line2]
         ax.legend(handles=handles, loc="upper left", fontsize=10, frameon=True)
 
         st.pyplot(fig)
-
 
 if __name__ == "__main__":
     NumPyVizApp()
