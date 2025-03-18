@@ -60,6 +60,25 @@ class NumPyVizApp:
             min_index = random_array.argmin()
             st.write(f"Min Value: {min_value} at Index {min_index}")
 
+    def generate_random_data(self, distribution, sample_size):
+        """Generate random data based on selected distribution."""
+        if distribution == "rand (Uniform)":
+            return np.random.rand(sample_size), "Uniform Distribution (rand)"
+        elif distribution == "randn (Normal)":
+            return np.random.randn(sample_size), "Normal Distribution (randn)"
+        elif distribution == "randint (Random Integers)":
+            return np.random.randint(0, 100, sample_size), "Random Integers (randint)"
+        elif distribution == "choice (Random Selection)":
+            choices = np.array([10, 20, 30, 40, 50])
+            return np.random.choice(choices, sample_size), "Random Selection (choice)"
+        elif distribution == "beta (Beta Distribution)":
+            return np.random.beta(2, 5, sample_size), "Beta Distribution (beta)"
+        elif distribution == "exponential (Exponential Distribution)":
+            return np.random.exponential(1.0, sample_size), "Exponential Distribution (exponential)"
+        elif distribution == "poisson (Poisson Distribution)":
+            return np.random.poisson(5, sample_size), "Poisson Distribution (poisson)"
+        return np.array([]), "Unknown Distribution"
+
     def display_array_transformations(self):
         """Handle numpy array transformations and visualization."""
         st.title("Shape & Shift: NumPy Array Playground")
@@ -83,51 +102,6 @@ class NumPyVizApp:
         st.code(transformed_array)
 
         self.plot_array_transformation(arr, transformed_array)
-
-    def reshape_array(self, arr, rows, cols, array_size):
-        """Reshapes an array if the dimensions match."""
-        if rows * cols == array_size:
-            reshaped_array = arr.reshape(rows, cols)
-            st.write(f"Reshaped Array ({rows}x{cols}):")
-            st.code(reshaped_array)
-            return reshaped_array
-        else:
-            st.warning("Rows × Columns must equal the total number of elements in the array.")
-            return arr
-
-    def apply_operation(self, arr, operation):
-        """Apply selected math operations."""
-        if operation == "Multiply by 2":
-            return arr * 2
-        elif operation == "Add 5":
-            return arr + 5
-        elif operation == "Square Elements":
-            return arr ** 2
-        return arr
-
-    def plot_array_transformation(self, original, transformed):
-        """Plot the transformation of an array."""
-        fig, ax = plt.subplots(figsize=(6, 4))
-
-        original_color = 'tan'
-        transformed_color = 'saddlebrown'
-
-        line1, = ax.plot(original, marker='o', linestyle='--', color=original_color, markersize=6, label="Original Array")
-
-        if not np.array_equal(original, transformed):
-            line2, = ax.plot(transformed, marker='s', linestyle='-', color=transformed_color, markersize=6, label="Transformed Array")
-        else:
-            line2 = None
-
-        ax.set_title("Array Transformation", fontsize=12, color='sienna')
-        ax.set_xlabel("Index", fontsize=10, color='peru')
-        ax.set_ylabel("Value", fontsize=10, color='peru')
-        ax.grid(True, linestyle=":", linewidth=0.6, color="tan")
-
-        handles = [line1] if line2 is None else [line1, line2]
-        ax.legend(handles=handles, loc="upper left", fontsize=10, frameon=True)
-
-        st.pyplot(fig)
 
 if __name__ == "__main__":
     NumPyVizApp()
