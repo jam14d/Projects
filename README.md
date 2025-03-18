@@ -17,6 +17,8 @@ This section allows users to generate and visualize different probability distri
 - Adjust sample size and bin count for better visualization.  
 - Read explanations on how each distribution works and when to use it.  
 - View histograms to analyze the generated data.  
+- Observe how the raw data changes depending on selection.
+- Calculate argmin() and argmax() and read explanation on its use case.
 
 #### 2. Shape & Shift: NumPy Array Playground  
 This section provides an interactive way to create, reshape, and transform NumPy arrays.  
