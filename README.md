@@ -7,7 +7,7 @@
 ### Overview  
 NumPy Viz is an interactive learning tool built with Streamlit that helps users explore **random number generation** and **array transformations** using NumPy. It provides real-time visualizations, explanations, and adjustable parameters to enhance understanding.  
 
-[Live App](https://jam14d-projects-numpy-visualizernumpy-viz-f7slut.streamlit.app/)  
+[Live App](https://jam14d-projects-numpy-visualizerapp-7ceorb.streamlit.app/)  
 
 ### Sections  
 
