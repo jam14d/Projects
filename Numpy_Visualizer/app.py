@@ -78,6 +78,87 @@ class NumPyVizApp:
         elif distribution == "poisson (Poisson Distribution)":
             return np.random.poisson(5, sample_size), "Poisson Distribution (poisson)"
         return None, ""
+    
+
+
+def display_array_transformations(self):
+        """handle numpy array transformations and viz."""
+        st.title("Shape & Shift: NumPy Array Playground")
+        st.write("Experiment with NumPy arrays! Generate sequences, reshape them into grids, and "
+             "apply mathematical transformations. See how numbers shift and change in real-time.")
+
+        # Step 1: Generate a NumPy array
+        array_size = st.slider("Select array size (0 to N):", min_value=5, max_value=100, value=25, step=5)
+        arr = np.arange(array_size)
+
+        st.write("Generated 1D array:")
+        st.code(arr)
+
+        # Step 2: Reshaping the array
+        rows = st.slider("Rows:", min_value=1, max_value=array_size, value=5)
+        cols = st.slider("Columns:", min_value=1, max_value=array_size, value=5)
+
+        reshaped_array = self.reshape_array(arr, rows, cols, array_size)
+
+        # Step 3: Apply mathematical operations
+        operation = st.selectbox("Choose an operation:", ["None", "Multiply by 2", "Add 5", "Square Elements"])
+        transformed_array = self.apply_operation(arr, operation)
+
+        st.code(transformed_array)
+
+        # Step 4: Visualization
+        self.plot_array_transformation(arr, transformed_array)
+
+    def reshape_array(self, arr, rows, cols, array_size):
+        """Reshapes an array if the dimensions match."""
+        if rows * cols == array_size:
+            reshaped_array = arr.reshape(rows, cols)
+            st.write(f"Reshaped Array ({rows}x{cols}):")
+            st.code(reshaped_array)
+            return reshaped_array
+        else:
+            st.warning("Rows × Columns must equal the total number of elements in the array.")
+            return arr  # Return original array if reshape isn't possible
+
+    def apply_operation(self, arr, operation):
+        """apply selected math operations"""
+        if operation == "Multiply by 2":
+            return arr * 2
+        elif operation == "Add 5":
+            return arr + 5
+        elif operation == "Square Elements":
+            return arr ** 2
+        return arr  # Return unchanged array if no operation is selected
+
+    def plot_array_transformation(self, original, transformed):
+    
+        fig, ax = plt.subplots(figsize=(6, 4))
+
+        # Define exact colors
+        original_color = 'tan'
+        transformed_color = 'saddlebrown'
+
+        # Plot the original array
+        line1, = ax.plot(original, marker='o', linestyle='--', color=original_color, markersize=6, label="Original Array")
+
+        # Only plot transformed array if it's different
+        if not np.array_equal(original, transformed):
+            line2, = ax.plot(transformed, marker='s', linestyle='-', color=transformed_color, markersize=6, label="Transformed Array")
+        else:
+            line2 = None  # No transformed array to show
+
+        ax.set_title("Array Transformation", fontsize=12, color='sienna')
+        ax.set_xlabel("Index", fontsize=10, color='peru')
+        ax.set_ylabel("Value", fontsize=10, color='peru')
+
+        ax.grid(True, linestyle=":", linewidth=0.6, color="tan")
+
+        # Explicitly set the legend colors
+        handles = [line1] if line2 is None else [line1, line2]
+        ax.legend(handles=handles, loc="upper left", fontsize=10, frameon=True)
+
+        st.pyplot(fig)
+
 
 if __name__ == "__main__":
     NumPyVizApp()
