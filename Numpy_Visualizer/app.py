@@ -48,7 +48,8 @@ class NumPyVizApp:
         
         if st.button("Find argmax()"):
             st.write("### Understanding argmax()")
-            st.write("argmax() returns the index of the maximum value in an array." 
+            st.write("argmax() returns the index of the maximum value in an array."
+                     softbreak 
                      "This is useful for finding where the highest value occurs.")
             max_value = random_array.max()
             max_index = random_array.argmax()
