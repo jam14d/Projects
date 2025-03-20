@@ -176,26 +176,66 @@ class NumPyVizApp:
             st.image(image, caption="Uploaded Image", use_column_width=True)
             
             image_array = np.array(image)
+            st.write("### Image Array Shape:")
+            st.code(image_array.shape)
+
+            st.write("### Understanding the Image Array Shape")
+            st.markdown(
+                """An image is stored as a NumPy array with three values:
+                Height (number of rows), Width (number of columns), Channels (color layers: Red, Green, Blue)
+                
+                Example: (256, 256, 3) means:
+                - 256 pixels tall
+                - 256 pixels wide
+                - 3 color channels (Red, Green, Blue)
+                
+                Each pixel's value ranges from 0 (dark) to 255 (bright).
+                """
+            )
             
             if st.button("Extract Red Channel"):
                 red_channel = image_array[:, :, 0]
-                self.display_channel(red_channel, "Red Channel", "Reds")
+                self.display_channel(red_channel, "Red Channel")
             
             if st.button("Extract Green Channel"):
                 green_channel = image_array[:, :, 1]
-                self.display_channel(green_channel, "Green Channel", "Greens")
+                self.display_channel(green_channel, "Green Channel")
             
             if st.button("Extract Blue Channel"):
                 blue_channel = image_array[:, :, 2]
-                self.display_channel(blue_channel, "Blue Channel", "Blues")
+                self.display_channel(blue_channel, "Blue Channel")
+            
+            if st.button("Show RGB Channels Side by Side"):
+                self.display_rgb_channels(image_array)
     
-    def display_channel(self, channel, title, cmap):
-        """Display extracted color channel"""
+    def display_channel(self, channel, title):
+        """Display extracted color channel in grayscale"""
         st.write(f"### {title} Array:")
         st.code(channel)
         fig, ax = plt.subplots()
-        ax.imshow(channel, cmap=cmap)
+        ax.imshow(channel, cmap="gray")  # Use grayscale colormap
         ax.axis("off")
+        st.pyplot(fig)
+    
+    def display_rgb_channels(self, image_array):
+        """Display all RGB channels side by side"""
+        red_channel = image_array[:, :, 0]
+        green_channel = image_array[:, :, 1]
+        blue_channel = image_array[:, :, 2]
+        
+        fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+        axes[0].imshow(red_channel, cmap="gray")
+        axes[0].set_title("Red Channel")
+        axes[0].axis("off")
+        
+        axes[1].imshow(green_channel, cmap="gray")
+        axes[1].set_title("Green Channel")
+        axes[1].axis("off")
+        
+        axes[2].imshow(blue_channel, cmap="gray")
+        axes[2].set_title("Blue Channel")
+        axes[2].axis("off")
+        
         st.pyplot(fig)
 
 
