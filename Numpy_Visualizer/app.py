@@ -1,19 +1,26 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
 
 class NumPyVizApp:
     def __init__(self):
-        """initialize app"""
-        self.option = st.sidebar.radio("Choose a section:", ["Exploring Probability: Random Data Generator", "Shape & Shift: NumPy Array Playground"])
+        """Initialize the app"""
+        self.option = st.sidebar.radio("Choose a section:", [
+            "Exploring Probability: Random Data Generator", 
+            "Shape & Shift: NumPy Array Playground",
+            "Image Channel Extractor"
+        ])
         self.run_app()
 
     def run_app(self):
-        """run the selected section of app"""
+        """Run the selected section of the app"""
         if self.option == "Exploring Probability: Random Data Generator":
             self.display_random_distributions()
         elif self.option == "Shape & Shift: NumPy Array Playground":
             self.display_array_transformations()
+        elif self.option == "Image Channel Extractor":
+            self.image_channel_extractor()
 
     def display_random_distributions(self):
         """Handle visualization of different NumPy random distributions."""
@@ -158,7 +165,38 @@ class NumPyVizApp:
         st.pyplot(fig)
 
 
-
+    ##image stuff
+    def image_channel_extractor(self):
+        """Upload an image and extract its color channels"""
+        st.title("Image Channel Extractor")
+        uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+        
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Image", use_column_width=True)
+            
+            image_array = np.array(image)
+            
+            if st.button("Extract Red Channel"):
+                red_channel = image_array[:, :, 0]
+                self.display_channel(red_channel, "Red Channel", "Reds")
+            
+            if st.button("Extract Green Channel"):
+                green_channel = image_array[:, :, 1]
+                self.display_channel(green_channel, "Green Channel", "Greens")
+            
+            if st.button("Extract Blue Channel"):
+                blue_channel = image_array[:, :, 2]
+                self.display_channel(blue_channel, "Blue Channel", "Blues")
+    
+    def display_channel(self, channel, title, cmap):
+        """Display extracted color channel"""
+        st.write(f"### {title} Array:")
+        st.code(channel)
+        fig, ax = plt.subplots()
+        ax.imshow(channel, cmap=cmap)
+        ax.axis("off")
+        st.pyplot(fig)
 
 
 
