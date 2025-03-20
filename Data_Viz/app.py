@@ -3,13 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-class NumPyVizApp:
+class DataVizApp:
     def __init__(self):
         """Initialize the app"""
         self.option = st.sidebar.radio("Choose a section:", [
             "Exploring Probability: Random Data Generator", 
             "Shape & Shift: NumPy Array Playground",
-            "Image Channel Extractor"
+            "Code Your Vision: Image Processing and OOP"
         ])
         self.run_app()
 
@@ -19,8 +19,8 @@ class NumPyVizApp:
             self.display_random_distributions()
         elif self.option == "Shape & Shift: NumPy Array Playground":
             self.display_array_transformations()
-        elif self.option == "Image Channel Extractor":
-            self.image_channel_extractor()
+        elif self.option == "Code Your Vision: Image Processing and OOP":
+            self.code_your_vision()
 
     def display_random_distributions(self):
         """Handle visualization of different NumPy random distributions."""
@@ -166,9 +166,10 @@ class NumPyVizApp:
 
 
     ##image stuff
-    def image_channel_extractor(self):
+        
+    def code_your_vision(self):
         """Upload an image and extract its color channels"""
-        st.title("Image Channel Extractor")
+        st.title("Code Your Vision: Image Processing and OOP")
         uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
         
         if uploaded_file is not None:
@@ -178,84 +179,65 @@ class NumPyVizApp:
             image_array = np.array(image)
             st.write("### Image Array Shape:")
             st.code(image_array.shape)
-
-            st.write("### Understanding the Image Array Shape")
-            st.markdown(
-                """An image is stored as a NumPy array with three values:
-                Height (number of rows), Width (number of columns), Channels (color layers: Red, Green, Blue)
-                
-                Example: (256, 256, 3) means:
-                - 256 pixels tall
-                - 256 pixels wide
-                - 3 color channels (Red, Green, Blue)
-                
-                Each pixel's value ranges from 0 (dark) to 255 (bright).
-                """
-            )
             
             if st.button("Extract Red Channel"):
                 red_channel = image_array[:, :, 0]
                 self.display_channel(red_channel, "Red Channel")
-                st.markdown(
-                    """A higher red value makes the pixel appear redder and brighter.
-                    A lower red value means less red is present, making the pixel darker or influenced by the other channels.
-                    (255, 0, 0) = Pure red, 
-                    (0, 0, 0) = No red (black)."""
-                )
             
             if st.button("Extract Green Channel"):
                 green_channel = image_array[:, :, 1]
                 self.display_channel(green_channel, "Green Channel")
-                st.markdown(
-                    """A higher green value makes the pixel appear greener and brighter.
-                    A lower green value reduces green intensity, affecting the overall color mix.
-                    (0, 255, 0) = Pure green, (0, 0, 0) = No green (black)."""
-                )
             
             if st.button("Extract Blue Channel"):
                 blue_channel = image_array[:, :, 2]
                 self.display_channel(blue_channel, "Blue Channel")
-                st.markdown(
-                    """A higher blue value makes the pixel appear bluer and brighter.
-                    A lower blue value reduces blue intensity, allowing other colors to dominate.
-                    (0, 0, 255) = Pure blue, (0, 0, 0) = No blue (black)"""
-                )
+        
+        # OOP Learning Section
+        st.title("Learn Object-Oriented Programming with Image Processing")
+        st.write("This section will guide you through OOP concepts by working with images in Python.")
+        
+        st.markdown("""
+        ## Step 1: Define the Class
+        - Think about what your class needs to run when you create `__init__`.
+        - Use `self` to store attributes that belong to the object.
+        - Add an `__init__` method that takes an optional image path and loads the image if provided.
+        """)
+        user_class_code = st.text_area("Write your class definition and `__init__` method:")
+        
+        st.markdown("""
+        ## Step 2: Load an Image
+        - Create a method called `load_image`.
+        - This function should open an image using `PIL.Image.open`.
+        - Convert it into a NumPy array using `np.array()` and store it as an attribute.
+        """)
+        user_load_code = st.text_area("Write your `load_image` function:")
 
-            if st.button("Show RGB Channels Side by Side"):
-                self.display_rgb_channels(image_array)
-    
+        st.markdown("""
+        ## Step 3: Extract Color Channels
+        - Create a function `extract_channel(self, channel_index)`.
+        - Use NumPy slicing to select the correct channel (`image[:, :, channel_index]`).
+        - The function should return `None` if the image is not loaded.
+        """)
+        user_extract_code = st.text_area("Write your `extract_channel` function:")
+
+        st.markdown("""
+        ## Step 4: Display a Channel
+        - Define a function `display_channel(self, channel, title)`.
+        - Use Matplotlib’s `imshow()` with `cmap="gray"` to show the extracted channel.
+        - Make sure to turn off the axis for a cleaner display.
+        """)
+        user_display_code = st.text_area("Write your `display_channel` function:")
+        
+        solution_code = """import numpy as np\nimport matplotlib.pyplot as plt\nfrom PIL import Image\n\nclass ImageProcessor:\n    def __init__(self, image_path=None):\n        \"\"\"Initialize the class with an optional image path.\"\"\"\n        self.image_path = image_path\n        self.image_array = None\n        if image_path:\n            self.load_image()\n\n    def load_image(self):\n        \"\"\"Load an image and convert it to a NumPy array.\"\"\"\n        image = Image.open(self.image_path)\n        self.image_array = np.array(image)\n\n    def extract_channel(self, channel_index):\n        \"\"\"Extract a specific color channel (0: Red, 1: Green, 2: Blue).\"\"\"\n        if self.image_array is not None:\n            return self.image_array[:, :, channel_index]\n        return None\n\n    def display_channel(self, channel, title):\n        \"\"\"Display an extracted channel in grayscale.\"\"\"\n        fig, ax = plt.subplots()\n        ax.imshow(channel, cmap=\"gray\")\n        ax.set_title(title)\n        ax.axis(\"off\")\n        plt.show()\n"""
+        st.download_button("Download Solution", solution_code, file_name="oop_image_processing_solution.txt", mime="text/plain")
+
     def display_channel(self, channel, title):
-        """Display extracted color channel in grayscale"""
-        st.write(f"### {title} Array:")
-        st.code(channel)
+        """Display an extracted color channel in grayscale"""
         fig, ax = plt.subplots()
-        ax.imshow(channel, cmap="gray")  # Use grayscale colormap
+        ax.imshow(channel, cmap="gray")
+        ax.set_title(title)
         ax.axis("off")
         st.pyplot(fig)
-    
-    def display_rgb_channels(self, image_array):
-        """Display all RGB channels side by side"""
-        red_channel = image_array[:, :, 0]
-        green_channel = image_array[:, :, 1]
-        blue_channel = image_array[:, :, 2]
-        
-        fig, axes = plt.subplots(1, 3, figsize=(12, 4))
-        axes[0].imshow(red_channel, cmap="gray")
-        axes[0].set_title("Red Channel")
-        axes[0].axis("off")
-        
-        axes[1].imshow(green_channel, cmap="gray")
-        axes[1].set_title("Green Channel")
-        axes[1].axis("off")
-        
-        axes[2].imshow(blue_channel, cmap="gray")
-        axes[2].set_title("Blue Channel")
-        axes[2].axis("off")
-        
-        st.pyplot(fig)
-
-
-
-# Run the Streamlit App
+# Run the app
 if __name__ == "__main__":
-    NumPyVizApp()
+    DataVizApp()
