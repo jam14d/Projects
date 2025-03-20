@@ -198,9 +198,8 @@ class DataVizApp:
         
         st.markdown("""
         ## Step 1: Define the Class
-        - Think about what your class needs to run when you create `__init__`.
+        - Think about what your class needs to run when you create `__init__` (like an image path).
         - Use `self` to store attributes that belong to the object.
-        - Add an `__init__` method that takes an optional image path and loads the image if provided.
         """)
         user_class_code = st.text_area("Write your class definition and `__init__` method:")
         
