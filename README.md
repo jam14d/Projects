@@ -27,6 +27,13 @@ This section provides an interactive way to create, reshape, and transform NumPy
 - Apply transformations like multiplication, addition, and squaring.  
 - Compare original and transformed arrays in visual plots.  
 
+#### 3. Image Channel Extractor  
+This section allows users to upload an image and extract its individual Red, Green, and Blue (RGB) channels.  
+- Upload an image file (PNG, JPG, JPEG).  
+- Extract and visualize the Red, Green, or Blue channels separately.  
+- View the numerical array representation of each channel.  
+- Gain insight into how images are represented in NumPy arrays.  
+
 ### How to Use  
 1. Select a section from the sidebar.  
 2. Adjust settings such as sample size, bins, or array dimensions.  
