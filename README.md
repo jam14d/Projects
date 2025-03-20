@@ -5,9 +5,9 @@
 ## Data Viz  
 
 ### Overview  
-Data Viz is an interactive learning tool built with Streamlit that helps users explore **random number generation** and **array transformations**. It provides real-time visualizations, explanations, and adjustable parameters to enhance understanding.  
+Data Viz is an interactive learning tool built with Streamlit that helps users explore **random data generation**, **array transformations**, **image processing****object-oriented programming**. It provides real-time visualizations, explanations, and adjustable parameters to enhance understanding.  
 
-[Live App](https://jam14d-projects-numpy-visualizerapp-7ceorb.streamlit.app/)  
+[Live App](https://jam14d-projects-data-vizapp-0rxeoi.streamlit.app/  
 
 ### Sections  
 
@@ -27,12 +27,23 @@ This section provides an interactive way to create, reshape, and transform NumPy
 - Apply transformations like multiplication, addition, and squaring.  
 - Compare original and transformed arrays in visual plots.  
 
-#### 3. Image Channel Extractor  
-This section allows users to upload an image and extract its individual Red, Green, and Blue (RGB) channels.  
+#### 3. Code Your Vision: Image Processing & OOP  
+This section introduces users to image processing concepts while learning object-oriented programming (OOP).  
 - Upload an image file (PNG, JPG, JPEG).  
-- Extract and visualize the Red, Green, or Blue channels separately.  
+- Extract and visualize individual **Red, Green, and Blue (RGB)** channels.  
 - View the numerical array representation of each channel.  
-- Gain insight into how images are represented in NumPy arrays.  
+- Learn how images are represented as NumPy arrays.  
+- Build an **OOP-based image processor** by implementing a class that:
+  - Loads images.
+  - Extracts color channels using NumPy.
+  - Displays processed images using Matplotlib.  
+- Hands-on coding exercises for defining class methods like:
+  - `__init__` for initialization.
+  - `load_image()` for reading images.
+  - `extract_channel()` for isolating color components.
+  - `display_channel()` for visualization.
+
+This section blends **computer vision** with **OOP fundamentals**, making it ideal for those looking to practice Python class structures with real-world applications.  
 
 ### How to Use  
 1. Select a section from the sidebar.  
