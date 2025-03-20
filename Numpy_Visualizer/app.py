@@ -196,15 +196,31 @@ class NumPyVizApp:
             if st.button("Extract Red Channel"):
                 red_channel = image_array[:, :, 0]
                 self.display_channel(red_channel, "Red Channel")
+                st.markdown(
+                    """A higher red value makes the pixel appear redder and brighter.
+                    A lower red value means less red is present, making the pixel darker or influenced by the other channels.
+                    (255, 0, 0) = Pure red, 
+                    (0, 0, 0) = No red (black)."""
+                )
             
             if st.button("Extract Green Channel"):
                 green_channel = image_array[:, :, 1]
                 self.display_channel(green_channel, "Green Channel")
+                st.markdown(
+                    """A higher green value makes the pixel appear greener and brighter.
+                    A lower green value reduces green intensity, affecting the overall color mix.
+                    (0, 255, 0) = Pure green, (0, 0, 0) = No green (black)."""
+                )
             
             if st.button("Extract Blue Channel"):
                 blue_channel = image_array[:, :, 2]
                 self.display_channel(blue_channel, "Blue Channel")
-            
+                st.markdown(
+                    """A higher blue value makes the pixel appear bluer and brighter.
+                    A lower blue value reduces blue intensity, allowing other colors to dominate.
+                    (0, 0, 255) = Pure blue, (0, 0, 0) = No blue (black)"""
+                )
+
             if st.button("Show RGB Channels Side by Side"):
                 self.display_rgb_channels(image_array)
     
