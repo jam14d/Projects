@@ -2,10 +2,10 @@
 
 ## General Applications
 
-## NumPy Viz  
+## Data Viz  
 
 ### Overview  
-NumPy Viz is an interactive learning tool built with Streamlit that helps users explore **random number generation** and **array transformations** using NumPy. It provides real-time visualizations, explanations, and adjustable parameters to enhance understanding.  
+Data Viz is an interactive learning tool built with Streamlit that helps users explore **random number generation** and **array transformations**. It provides real-time visualizations, explanations, and adjustable parameters to enhance understanding.  
 
 [Live App](https://jam14d-projects-numpy-visualizerapp-7ceorb.streamlit.app/)  
 
