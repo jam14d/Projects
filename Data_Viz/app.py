@@ -170,7 +170,7 @@ class DataVizApp:
     def code_your_vision(self):
         """Upload an image and extract its color channels"""
         st.title("Code Your Vision: Image Processing and OOP")
-        uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+        uploaded_file = st.file_uploader("Upload an image and extract its color channels", type=["png", "jpg", "jpeg"])
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
@@ -196,6 +196,26 @@ class DataVizApp:
         st.title("Learn Object-Oriented Programming with Image Processing")
         st.write("This section will guide you through OOP concepts by working with images in Python.")
         
+        st.markdown("""## Breakdown of Class Design Thinking:
+### What does the user need to provide?
+
+These become parameters in __init__ if they are likely to be known at the time of object creation.
+
+Example: image_path is an input the user will probably provide.
+
+### What data will be derived from the inputs?
+
+These become attributes that are set later inside the class (but not necessarily parameters).
+
+Example: image_array is derived from image_path once an image is loaded.
+
+### What needs to be stored inside the class for later use?
+
+Any attributes that the class will use or modify should be initialized inside __init__.
+
+Even if they start as None, it's good to define them in __init__ so they exist when the object is created.""")
+        
+
         st.markdown("""
         ## Step 1: Define the Class
         - Define functions inside the class using `def`
