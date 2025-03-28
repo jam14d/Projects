@@ -17,10 +17,8 @@ conda install -c conda-forge biopython pandas numpy matplotlib
    ```
    .../anaconda3/envs/bioinformatics/bin/python
    ```
-5. Restart VS Code if needed.
 
 
-# *Science Stuff*
 
 # Mutation Types
 1. Single Nucleotide Polymorphisms (SNPs) (A → G, C → T, etc.)
