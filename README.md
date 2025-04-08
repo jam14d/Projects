@@ -66,7 +66,6 @@ streamlit run app.py
 - SciPy Statistical Distributions: https://docs.scipy.org/doc/scipy/tutorial/stats.html
 
 ---
-
 ### Budget Buddy App
 
 #### Overview
@@ -97,51 +96,6 @@ Budget Buddy is an interactive budgeting tool created with Streamlit and Plotly.
 ```bash
 streamlit run app.py
 ```
-
----
-
-## Scientific Computing
-
-### Brain Tumor Classification using MRI Scans
-
-#### Overview
-Classify MRI scans into:
-- **Glioma**
-- **Meningioma**
-- **Pituitary Tumor**
-- **No Tumor (Healthy Brain)**
-
-#### Setup Instructions
-- Clone repository or download project files.
-- Create and activate a Python virtual environment:
-```bash
-python3.10 -m venv brain_tumor_env
-source brain_tumor_env/bin/activate
-```
-- Upgrade pip:
-```bash
-pip install --upgrade pip
-```
-- Install dependencies:
-```bash
-pip install scikit-learn seaborn matplotlib tensorflow-macos keras tensorboard tensorflow-estimator tensorflow-metal
-```
-- Organize dataset from [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset).
-- Split dataset using provided Python script:
-```bash
-python split_train_val.py
-```
-
-#### Project Goals
-- Image preprocessing and visualization
-- CNN training
-- Data augmentation
-- Model evaluation (accuracy, loss, confusion matrix)
-- Save trained models
-
-#### Using VGG16 Model
-- Pre-trained on ImageNet.
-- Feature extraction and transfer learning.
 
 ---
 

@@ -4,10 +4,10 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 
 # Load reference genome
-ref_file = "/Users/jamieannemortel/Projects/Bioinformatics/covid_analysis_project/data/reference-NC_045512.fasta"
+ref_file = "/Users/jamieannemortel/Projects/Covid19_VariantAnalysis/data/reference-NC_045512.fasta"
 
 # Load variant (an omnicron)
-variant_file = "/Users/jamieannemortel/Projects/Bioinformatics/covid_analysis_project/data/BA.3.1.fasta"
+variant_file = "/Users/jamieannemortel/Projects/Covid19_VariantAnalysis/data/BA.3.1.fasta"
 
 def load_fasta(filename):
     record = SeqIO.read(filename, "fasta")
