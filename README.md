@@ -1,7 +1,3 @@
-# Coding Projects
-
-## General Applications
-
 ## Data Viz  
 
 ### Overview  
